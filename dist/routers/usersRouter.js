@@ -37,7 +37,7 @@ exports.routerUsers.get("/", checkAuth_1.checkAuth, checkQueryUsers_1.checkQuery
     }
     res.send(users);
 }));
-exports.routerUsers.post("/", checkAuth_1.checkAuth, usersValidator_1.userValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUsers.post("/", checkAuth_1.checkAuth, usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email, login, password } = req.body;
     let newUser = yield users_service_1.UsersService.createUser(email, login, password);
     if (!newUser) {

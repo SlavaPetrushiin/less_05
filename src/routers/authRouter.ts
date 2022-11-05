@@ -1,4 +1,4 @@
-import { checkError } from './../utils/checkError';
+import { checkError, checkErrorAuth } from './../utils/checkError';
 import express, { Request, Response } from 'express';
 import { loginValidator } from '../validators/usersValidator';
 import { UsersService } from './../services/users_service';
@@ -9,7 +9,7 @@ interface ILogin{
 	login: string;
 }
 
-routerAuth.post('/login', loginValidator, checkError,  async (req: Request<{}, {}, ILogin>, res: Response) => {
+routerAuth.post('/login', loginValidator, checkErrorAuth,  async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let {login, password} = req.body;
 	let isAuth = await UsersService.login(login, password);
 	if(!isAuth){

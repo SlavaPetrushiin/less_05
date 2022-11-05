@@ -1,7 +1,7 @@
 import { IUsersDBModel, QueryRepository } from './../repositories/query-db-repository';
 import { checkAuth } from './../utils/checkAuth';
 import { UsersService } from './../services/users_service';
-import { checkErrorAuth } from './../utils/checkError';
+import { checkError } from './../utils/checkError';
 import express, { Request, Response } from 'express';
 import { userValidator } from '../validators/usersValidator';
 import { checkQueryUsers, IQueryUsers } from '../utils/checkQueryUsers';
@@ -34,7 +34,7 @@ routerUsers.get("/", checkAuth, checkQueryUsers, async (req: Request<{}, {}, {},
 	res.send(users);
 })
 
-routerUsers.post("/", checkAuth, userValidator, checkErrorAuth, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
+routerUsers.post("/", checkAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
 	let { email, login, password } = req.body;
 	let newUser = await UsersService.createUser(email, login, password);
 	if (!newUser) {
