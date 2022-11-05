@@ -132,7 +132,7 @@ export class QueryRepository {
 					email: { $regex: searchEmailTerm, $options: "$i" },
 					login: { $regex: searchLoginTerm, $options: "$i" }
 				},
-				{ projection: { ...DEFAULT_PROJECTION } }
+				{ projection: { ...DEFAULT_PROJECTION, hasPassword: false } }
 			)
 				.skip(skip)
 				.limit(+pageSize)

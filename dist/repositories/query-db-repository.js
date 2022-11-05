@@ -108,7 +108,7 @@ class QueryRepository {
                 let result = yield db_1.usersCollection.find({
                     email: { $regex: searchEmailTerm, $options: "$i" },
                     login: { $regex: searchLoginTerm, $options: "$i" }
-                }, { projection: Object.assign({}, DEFAULT_PROJECTION) })
+                }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { hasPassword: false }) })
                     .skip(skip)
                     .limit(+pageSize)
                     .sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
