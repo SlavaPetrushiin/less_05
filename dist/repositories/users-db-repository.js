@@ -34,5 +34,16 @@ class UsersRepositoryModel {
             }
         });
     }
+    deleteUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let result = yield db_1.usersCollection.deleteMany({});
+                return result.deletedCount > 0 ? true : false;
+            }
+            catch (error) {
+                return false;
+            }
+        });
+    }
 }
 exports.UsersRepository = new UsersRepositoryModel();

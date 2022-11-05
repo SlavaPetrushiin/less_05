@@ -43,6 +43,12 @@ routerUsers.post("/", checkAuth, userValidator, checkError, async (req: Request<
 	return res.status(201).send(newUser);
 })
 
+
+routerUsers.delete("/", checkAuth, async (req, res) => {
+	UsersService.deleteUsers();
+	res.sendStatus(204);
+})
+
 routerUsers.delete("/:id", checkAuth, async (req: Request<{ id: string }>, res: Response) => {
 	let { id } = req.params;
 	let isDeleted = await UsersService.deleteUser(id);

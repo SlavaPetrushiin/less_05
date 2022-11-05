@@ -45,6 +45,10 @@ exports.routerUsers.post("/", checkAuth_1.checkAuth, usersValidator_1.userValida
     }
     return res.status(201).send(newUser);
 }));
+exports.routerUsers.delete("/", checkAuth_1.checkAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    users_service_1.UsersService.deleteUsers();
+    res.sendStatus(204);
+}));
 exports.routerUsers.delete("/:id", checkAuth_1.checkAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id } = req.params;
     let isDeleted = yield users_service_1.UsersService.deleteUser(id);

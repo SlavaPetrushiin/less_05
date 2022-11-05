@@ -21,6 +21,15 @@ class UsersRepositoryModel {
 			return false;
 		}
 	}
+
+	public async deleteUsers(): Promise<boolean> {
+		try {
+			let result = await usersCollection.deleteMany({});
+			return result.deletedCount > 0 ? true : false;
+		} catch (error) {
+			return false;
+		}
+	}
 }
 
 export const  UsersRepository = new UsersRepositoryModel();

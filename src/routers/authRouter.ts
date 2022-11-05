@@ -9,10 +9,9 @@ interface ILogin{
 	login: string;
 }
 
-routerAuth.post('/', loginValidator, checkError,  async (req: Request<{}, {}, ILogin>, res: Response) => {
+routerAuth.post('/login', loginValidator, checkError,  async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let {login, password} = req.body;
 	let isAuth = await UsersService.login(login, password);
-	debugger
 	if(!isAuth){
 		res.sendStatus(401);
 		return

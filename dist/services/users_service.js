@@ -70,5 +70,10 @@ class UsersService {
             return users_db_repository_1.UsersRepository.deleteUser(id);
         });
     }
+    static deleteUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return users_db_repository_1.UsersRepository.deleteUsers();
+        });
+    }
 }
 exports.UsersService = UsersService;

@@ -22,7 +22,7 @@ const tetstingRouter_1 = require("./routers/tetstingRouter");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const port = process.env.PORT || 3000;
-app.use('/login', authRouter_1.routerAuth);
+app.use('/auth', authRouter_1.routerAuth);
 app.use('/users', usersRouter_1.routerUsers);
 app.use('/posts', postsRouter_1.routerPosts);
 app.use('/blogs', blogRouter_1.routerBlogs);

@@ -18,10 +18,9 @@ const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
 const users_service_1 = require("./../services/users_service");
 exports.routerAuth = express_1.default.Router();
-exports.routerAuth.post('/', usersValidator_1.loginValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password } = req.body;
     let isAuth = yield users_service_1.UsersService.login(login, password);
-    debugger;
     if (!isAuth) {
         res.sendStatus(401);
         return;
