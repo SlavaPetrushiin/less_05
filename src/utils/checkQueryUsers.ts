@@ -19,8 +19,19 @@ const DEFAULT_QUERY = {
 	sortDirection: "desc"
 }
 
+enum FIELDS_FOR_SORTBY {
+	id = "id",
+	login = "login",
+	email = "email",
+	createdAt = "createdAt"
+}
+
+
 export function checkQueryUsers(req: Request<{}, {}, {}, IQueryUsers>, res: Response, next: NextFunction) {
-	let {pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection} = req.query;
+	let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
+	console.log("sortBy: ", sortBy);
+	
+console.log("Object.values: ", Object.values(FIELDS_FOR_SORTBY));
 
 	if (!searchEmailTerm) {
 		req.query.searchEmailTerm = DEFAULT_QUERY.searchEmailTerm;
@@ -34,7 +45,7 @@ export function checkQueryUsers(req: Request<{}, {}, {}, IQueryUsers>, res: Resp
 	if (!pageSize || isNaN(parseInt(pageSize, 10))) {
 		req.query.pageSize = DEFAULT_QUERY.pageSize;
 	}
-	if (!sortBy || !(sortBy in DEFAULT_QUERY)) {
+	if (!sortBy || !Object.values(FIELDS_FOR_SORTBY).includes(sortBy as FIELDS_FOR_SORTBY)) {
 		req.query.sortBy = DEFAULT_QUERY.sortBy;
 	}
 	if (!sortDirection || sortDirection != "asc" && sortDirection != "desc") {
