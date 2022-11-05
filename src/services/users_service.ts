@@ -45,10 +45,11 @@ export class UsersService {
 	static async createUser(email: string, login: string, password: string): ResponseCreateUser {
 		const id = new Date().getMilliseconds().toString();
 		const createdAt = new Date().toISOString();
-		const candidate = await QueryRepository.getUser(login);
+		//const candidate = await QueryRepository.getUser(login);
+		//console.log("candidate: ", candidate);
 		const hasPass = await hasPassword(password);
 
-		if(candidate || !hasPass){
+		if(!hasPass){
 			return null;
 		}
 

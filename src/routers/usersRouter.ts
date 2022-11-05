@@ -36,7 +36,9 @@ routerUsers.get("/", checkAuth, checkQueryUsers, async (req: Request<{}, {}, {},
 
 routerUsers.post("/", checkAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
 	let { email, login, password } = req.body;
+	console.log("yyy");
 	let newUser = await UsersService.createUser(email, login, password);
+	console.log(newUser);
 	if (!newUser) {
 		return res.sendStatus(404);
 	}

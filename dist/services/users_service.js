@@ -55,9 +55,10 @@ class UsersService {
         return __awaiter(this, void 0, void 0, function* () {
             const id = new Date().getMilliseconds().toString();
             const createdAt = new Date().toISOString();
-            const candidate = yield query_db_repository_1.QueryRepository.getUser(login);
+            //const candidate = await QueryRepository.getUser(login);
+            //console.log("candidate: ", candidate);
             const hasPass = yield hasPassword(password);
-            if (candidate || !hasPass) {
+            if (!hasPass) {
                 return null;
             }
             const newUser = { email, login, id, createdAt, hasPassword: hasPass };
