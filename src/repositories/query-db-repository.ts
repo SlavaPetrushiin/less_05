@@ -120,17 +120,20 @@ export class QueryRepository {
 		}
 	}
 
-	
+
 
 	static async getUsers(params: Required<IQueryUsers>): Promise<IUsersDBModel | null> {
 		try {
 			let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = params;
+			console.log(pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection);
 			let skip = (+pageNumber - 1) * +pageSize;
 
 			let result = await usersCollection.find(
 				{
-					email: { $regex: searchEmailTerm, $options: "$i" },
-					login: { $regex: searchLoginTerm, $options: "$i" }
+					$or: [
+						{ email: { $regex: searchEmailTerm, $options: "$i" } },
+						{ login: { $regex: searchLoginTerm, $options: "$i" } }
+					]
 				},
 				{ projection: { ...DEFAULT_PROJECTION, hasPassword: false } }
 			)
@@ -140,9 +143,11 @@ export class QueryRepository {
 				.toArray();
 
 			let totalCount = await usersCollection.countDocuments({
-				email: { $regex: searchEmailTerm, $options: "$i" },
-				login: { $regex: searchLoginTerm, $options: "$i" }
-			})
+				$or: [
+					{ email: { $regex: searchEmailTerm, $options: "$i" } },
+					{ login: { $regex: searchLoginTerm, $options: "$i" } }
+				]
+			},)
 			let pageCount = Math.ceil(totalCount / +pageSize);
 
 			return {

@@ -104,18 +104,23 @@ class QueryRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = params;
+                console.log(pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection);
                 let skip = (+pageNumber - 1) * +pageSize;
                 let result = yield db_1.usersCollection.find({
-                    email: { $regex: searchEmailTerm, $options: "$i" },
-                    login: { $regex: searchLoginTerm, $options: "$i" }
+                    $or: [
+                        { email: { $regex: searchEmailTerm, $options: "$i" } },
+                        { login: { $regex: searchLoginTerm, $options: "$i" } }
+                    ]
                 }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { hasPassword: false }) })
                     .skip(skip)
                     .limit(+pageSize)
                     .sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
                     .toArray();
                 let totalCount = yield db_1.usersCollection.countDocuments({
-                    email: { $regex: searchEmailTerm, $options: "$i" },
-                    login: { $regex: searchLoginTerm, $options: "$i" }
+                    $or: [
+                        { email: { $regex: searchEmailTerm, $options: "$i" } },
+                        { login: { $regex: searchLoginTerm, $options: "$i" } }
+                    ]
                 });
                 let pageCount = Math.ceil(totalCount / +pageSize);
                 return {
