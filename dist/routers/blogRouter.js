@@ -16,7 +16,7 @@ exports.routerBlogs = void 0;
 const query_db_repository_1 = require("./../repositories/query-db-repository");
 const posts_service_1 = require("./../services/posts_service");
 const blogsValidator_1 = require("./../validators/blogsValidator");
-const checkAuth_1 = require("./../utils/checkAuth");
+const checkBasicAuth_1 = require("../utils/checkBasicAuth");
 const express_1 = __importDefault(require("express"));
 const checkError_1 = require("../utils/checkError");
 const blogs_service_1 = require("../services/blogs_service");
@@ -34,7 +34,7 @@ exports.routerBlogs.get('/', checkQuery_1.checkQueryPostsAndBlogs, (req, res) =>
     });
     res.send(blogs);
 }));
-exports.routerBlogs.post('/', checkAuth_1.checkAuth, blogsValidator_1.createAndUpdateBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.post('/', checkBasicAuth_1.checkBasicAuth, blogsValidator_1.createAndUpdateBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { name, youtubeUrl } = req.body;
     let newBlog = yield blogs_service_1.BlogsService.createBlog(name, youtubeUrl);
     if (!newBlog)
@@ -66,7 +66,7 @@ exports.routerBlogs.get('/:id/posts', checkQuery_1.checkQueryPostsAndBlogs, (req
     }
     return res.send(posts);
 }));
-exports.routerBlogs.post('/:id/posts', checkAuth_1.checkAuth, blogsValidator_1.checkBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.post('/:id/posts', checkBasicAuth_1.checkBasicAuth, blogsValidator_1.checkBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
     let blog = yield query_db_repository_1.QueryRepository.getOneBlog(id);
     if (!blog)
@@ -78,7 +78,7 @@ exports.routerBlogs.post('/:id/posts', checkAuth_1.checkAuth, blogsValidator_1.c
     }
     res.status(201).send(newPost);
 }));
-exports.routerBlogs.put('/:id', checkAuth_1.checkAuth, blogsValidator_1.createAndUpdateBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.put('/:id', checkBasicAuth_1.checkBasicAuth, blogsValidator_1.createAndUpdateBlogValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { name, youtubeUrl, createdAt } = req.body;
     let { id } = req.params;
     let isUpdatedBlog = yield blogs_service_1.BlogsService.updateBlog({ id, name, youtubeUrl, createdAt });
@@ -87,7 +87,7 @@ exports.routerBlogs.put('/:id', checkAuth_1.checkAuth, blogsValidator_1.createAn
     }
     res.sendStatus(204);
 }));
-exports.routerBlogs.delete('/:id', checkAuth_1.checkAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.delete('/:id', checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id } = req.params;
     let isDeletesBlog = yield blogs_service_1.BlogsService.deleteBlog(id);
     if (!isDeletesBlog) {

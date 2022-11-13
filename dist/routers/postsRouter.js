@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerPosts = void 0;
-const checkAuth_1 = require("../utils/checkAuth");
+const checkBasicAuth_1 = require("../utils/checkBasicAuth");
 const express_1 = __importDefault(require("express"));
 const checkError_1 = require("../utils/checkError");
 const postsValidator_1 = require("../validators/postsValidator");
@@ -39,7 +39,7 @@ exports.routerPosts.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     res.send(foundedPost);
 }));
-exports.routerPosts.post('/', checkAuth_1.checkAuth, postsValidator_1.createAndUpdatePostsValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.post('/', checkBasicAuth_1.checkBasicAuth, postsValidator_1.createAndUpdatePostsValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { blogId, content, shortDescription, title } = req.body;
     let newPost = yield posts_service_1.PostService.createPost({ blogId, content, shortDescription, title });
     if (!newPost) {
@@ -47,7 +47,7 @@ exports.routerPosts.post('/', checkAuth_1.checkAuth, postsValidator_1.createAndU
     }
     res.status(201).send(newPost);
 }));
-exports.routerPosts.put('/:id', checkAuth_1.checkAuth, postsValidator_1.createAndUpdatePostsValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.put('/:id', checkBasicAuth_1.checkBasicAuth, postsValidator_1.createAndUpdatePostsValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { blogId, content, shortDescription, title } = req.body;
     let { id } = req.params;
     let isUpdatedBPost = yield posts_service_1.PostService.updatePost({ id, blogId, content, shortDescription, title });
@@ -56,7 +56,7 @@ exports.routerPosts.put('/:id', checkAuth_1.checkAuth, postsValidator_1.createAn
     }
     res.sendStatus(204);
 }));
-exports.routerPosts.delete('/:id', checkAuth_1.checkAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.delete('/:id', checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id } = req.params;
     let isDeletesPost = yield posts_service_1.PostService.deletePost(id);
     if (!isDeletesPost) {

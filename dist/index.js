@@ -19,6 +19,7 @@ const db_1 = require("./repositories/db");
 const blogRouter_1 = require("./routers/blogRouter");
 const postsRouter_1 = require("./routers/postsRouter");
 const tetstingRouter_1 = require("./routers/tetstingRouter");
+const commentsRouter_1 = require("./routers/commentsRouter");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 const port = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use('/auth', authRouter_1.routerAuth);
 app.use('/users', usersRouter_1.routerUsers);
 app.use('/posts', postsRouter_1.routerPosts);
 app.use('/blogs', blogRouter_1.routerBlogs);
+app.use('/comments', commentsRouter_1.routerComments);
 app.use('/testing', tetstingRouter_1.routerTesting);
 app.use((req, res) => {
     res.type('text/plain');

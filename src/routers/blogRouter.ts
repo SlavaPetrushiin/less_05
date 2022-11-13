@@ -1,7 +1,7 @@
 import { QueryRepository } from './../repositories/query-db-repository';
 import { PostService } from './../services/posts_service';
 import { createAndUpdateBlogValidator, checkBlogValidator } from './../validators/blogsValidator';
-import { checkAuth } from './../utils/checkAuth';
+import { checkBasicAuth } from '../utils/checkBasicAuth';
 import express, { Request, Response } from 'express';
 import { ApiTypes } from '../types/types';
 import { checkError } from '../utils/checkError';
@@ -24,7 +24,7 @@ routerBlogs.get('/', checkQueryPostsAndBlogs, async (req: Request<{}, {}, {}, IQ
 	res.send(blogs);
 })
 
-routerBlogs.post('/', checkAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{}, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response<ApiTypes.IBlog | boolean>) => {
+routerBlogs.post('/', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{}, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response<ApiTypes.IBlog | boolean>) => {
 	let { name, youtubeUrl } = req.body;
 	let newBlog = await BlogsService.createBlog(name, youtubeUrl);
 	if (!newBlog) return res.sendStatus(400);
@@ -60,7 +60,7 @@ routerBlogs.get('/:id/posts', checkQueryPostsAndBlogs, async (req: Request<{ id:
 	return res.send(posts);
 })
 
-routerBlogs.post('/:id/posts', checkAuth, checkBlogValidator, checkError, async (req: Request<{ id: string }, {}, ApiTypes.IBlogPost>, res: Response) => {
+routerBlogs.post('/:id/posts', checkBasicAuth, checkBlogValidator, checkError, async (req: Request<{ id: string }, {}, ApiTypes.IBlogPost>, res: Response) => {
 	let id = req.params.id;
 	let blog = await QueryRepository.getOneBlog(id);
 	if(!blog) return res.sendStatus(404);
@@ -74,7 +74,7 @@ routerBlogs.post('/:id/posts', checkAuth, checkBlogValidator, checkError, async 
 	res.status(201).send(newPost);
 })
 
-routerBlogs.put('/:id', checkAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{ id: string }, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response) => {
+routerBlogs.put('/:id', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{ id: string }, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response) => {
 	let { name, youtubeUrl, createdAt } = req.body;
 	let { id } = req.params;
 	let isUpdatedBlog = await BlogsService.updateBlog({ id, name, youtubeUrl, createdAt });
@@ -85,7 +85,7 @@ routerBlogs.put('/:id', checkAuth, createAndUpdateBlogValidator, checkError, asy
 	res.sendStatus(204);
 })
 
-routerBlogs.delete('/:id', checkAuth, async (req: Request<{ id: string }>, res: Response) => {
+routerBlogs.delete('/:id', checkBasicAuth, async (req: Request<{ id: string }>, res: Response) => {
 	let { id } = req.params;
 	let isDeletesBlog = await BlogsService.deleteBlog(id);
 	if (!isDeletesBlog) {

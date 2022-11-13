@@ -13,17 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerAuth = void 0;
+const checkBearerAuth_1 = require("./../utils/checkBearerAuth");
 const checkError_1 = require("./../utils/checkError");
 const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
 const users_service_1 = require("./../services/users_service");
+const jwt_service_1 = require("../services/jwt_service");
 exports.routerAuth = express_1.default.Router();
+exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    res.send(user);
+}));
 exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password } = req.body;
-    let isAuth = yield users_service_1.UsersService.login(login, password);
-    if (!isAuth) {
+    let user = yield users_service_1.UsersService.login(login, password);
+    if (!user) {
         res.sendStatus(401);
         return;
     }
-    res.sendStatus(204);
+    const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user);
+    if (!accessToken) {
+        res.sendStatus(401);
+        return;
+    }
+    res.send({ accessToken });
 }));

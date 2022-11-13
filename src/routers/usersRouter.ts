@@ -1,5 +1,5 @@
 import { IUsersDBModel, QueryRepository } from './../repositories/query-db-repository';
-import { checkAuth } from './../utils/checkAuth';
+import { checkBasicAuth } from '../utils/checkBasicAuth';
 import { UsersService } from './../services/users_service';
 import { checkError } from './../utils/checkError';
 import express, { Request, Response } from 'express';
@@ -14,7 +14,7 @@ interface ICreateUserInput {
 
 export const routerUsers = express.Router();
 
-routerUsers.get("/", checkAuth, checkQueryUsers, async (req: Request<{}, {}, {}, IQueryUsers>, res: Response<IUsersDBModel>) => {
+routerUsers.get("/", checkBasicAuth, checkQueryUsers, async (req: Request<{}, {}, {}, IQueryUsers>, res: Response<IUsersDBModel>) => {
 	let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
 
 	let users = await QueryRepository.getUsers({
@@ -34,7 +34,7 @@ routerUsers.get("/", checkAuth, checkQueryUsers, async (req: Request<{}, {}, {},
 	res.send(users);
 })
 
-routerUsers.post("/", checkAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
+routerUsers.post("/", checkBasicAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
 	let { email, login, password } = req.body;
 	let newUser = await UsersService.createUser(email, login, password);
 	if (!newUser) {
@@ -44,12 +44,12 @@ routerUsers.post("/", checkAuth, userValidator, checkError, async (req: Request<
 })
 
 
-routerUsers.delete("/", checkAuth, async (req, res) => {
+routerUsers.delete("/", checkBasicAuth, async (req, res) => {
 	UsersService.deleteUsers();
 	res.sendStatus(204);
 })
 
-routerUsers.delete("/:id", checkAuth, async (req: Request<{ id: string }>, res: Response) => {
+routerUsers.delete("/:id", checkBasicAuth, async (req: Request<{ id: string }>, res: Response) => {
 	let { id } = req.params;
 	let isDeleted = await UsersService.deleteUser(id);
 

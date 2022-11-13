@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerUsers = void 0;
 const query_db_repository_1 = require("./../repositories/query-db-repository");
-const checkAuth_1 = require("./../utils/checkAuth");
+const checkBasicAuth_1 = require("./../utils/checkBasicAuth");
 const users_service_1 = require("./../services/users_service");
 const checkError_1 = require("./../utils/checkError");
 const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
 const checkQueryUsers_1 = require("../utils/checkQueryUsers");
 exports.routerUsers = express_1.default.Router();
-exports.routerUsers.get("/", checkAuth_1.checkAuth, checkQueryUsers_1.checkQueryUsers, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUsers.get("/", checkBasicAuth_1.checkBasicAuth, checkQueryUsers_1.checkQueryUsers, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
     let users = yield query_db_repository_1.QueryRepository.getUsers({
         pageNumber: pageNumber,
@@ -37,7 +37,7 @@ exports.routerUsers.get("/", checkAuth_1.checkAuth, checkQueryUsers_1.checkQuery
     }
     res.send(users);
 }));
-exports.routerUsers.post("/", checkAuth_1.checkAuth, usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUsers.post("/", checkBasicAuth_1.checkBasicAuth, usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email, login, password } = req.body;
     let newUser = yield users_service_1.UsersService.createUser(email, login, password);
     if (!newUser) {
@@ -45,7 +45,7 @@ exports.routerUsers.post("/", checkAuth_1.checkAuth, usersValidator_1.userValida
     }
     return res.status(201).send(newUser);
 }));
-exports.routerUsers.delete("/:id", checkAuth_1.checkAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerUsers.delete("/:id", checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { id } = req.params;
     let isDeleted = yield users_service_1.UsersService.deleteUser(id);
     if (!isDeleted) {

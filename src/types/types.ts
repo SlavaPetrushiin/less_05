@@ -16,14 +16,14 @@ export namespace ApiTypes {
 		createdAt: string;
 	}
 
-	export interface IFieldError{
+	export interface IFieldError {
 		message: string;
 		field: string;
 	}
 
-	export type ParamsCreateAndUpdateBlog =  Omit<ApiTypes.IBlog, 'id'>
-	export type ParamsCreatePost =  Omit<ApiTypes.IPost, 'id' | 'blogName'>
-	export type ParamsUpdatePost =  Omit<ApiTypes.IPost, 'blogName'>
+	export type ParamsCreateAndUpdateBlog = Omit<ApiTypes.IBlog, 'id'>
+	export type ParamsCreatePost = Omit<ApiTypes.IPost, 'id' | 'blogName'>
+	export type ParamsUpdatePost = Omit<ApiTypes.IPost, 'blogName'>
 
 	export interface ICreateAndUpdateBlogParams {
 		title: string;
@@ -32,7 +32,7 @@ export namespace ApiTypes {
 		blogId: string;
 	}
 
-	export interface IBlogPost{
+	export interface IBlogPost {
 		title: string;
 		shortDescription: string;
 		content: string;
@@ -44,5 +44,13 @@ export namespace ApiTypes {
 		id: string;
 		createdAt: string;
 		hasPassword: string
+	}
+
+	export interface ICommentModel {
+		id: string;
+		content: string
+		userId: string;
+		userLogin: string;
+		createdAt: string;
 	}
 }

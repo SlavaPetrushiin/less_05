@@ -5,6 +5,7 @@ import { runDB } from './repositories/db';
 import { routerBlogs } from './routers/blogRouter';
 import { routerPosts } from './routers/postsRouter';
 import { routerTesting } from './routers/tetstingRouter';
+import { routerComments } from './routers/commentsRouter';
 
 const app = express();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use('/auth', routerAuth);
 app.use('/users', routerUsers);
 app.use('/posts', routerPosts);
 app.use('/blogs', routerBlogs);
+app.use('/comments', routerComments);
 app.use('/testing', routerTesting);
 
 app.use((req: Request, res: Response) => {

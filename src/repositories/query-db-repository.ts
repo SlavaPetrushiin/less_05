@@ -1,7 +1,7 @@
 import { ApiTypes } from '../types/types';
 import { IQueryUsers } from '../utils/checkQueryUsers';
 import { BlogsRepository } from './blogs-db-repository';
-import { blogsCollection, postsCollection, usersCollection } from "./db";
+import { blogsCollection, postsCollection, usersCollection, commentsCollection } from "./db";
 
 interface IReqAllBlogs {
 	searchNameTerm: string;
@@ -111,16 +111,15 @@ export class QueryRepository {
 		}
 	}
 
-	static async getUser(login: string): Promise<ApiTypes.IUserDB | null> {
+	static async getUser(id: string): Promise<ApiTypes.IUserDB | null> {
 		try {
-			return await usersCollection.findOne({ login }, { projection: { ...DEFAULT_PROJECTION } })
+			let user = await usersCollection.findOne({ id }, { projection: { ...DEFAULT_PROJECTION, hasPassword: false, createdAt: false  } });
+			return user;
 		} catch (error) {
 			console.error(error);
 			return null;
 		}
 	}
-
-
 
 	static async getUsers(params: Required<IQueryUsers>): Promise<IUsersDBModel | null> {
 		try {
@@ -159,6 +158,15 @@ export class QueryRepository {
 			}
 		} catch (error) {
 			console.error(`error --> getUsers - ${error}`);
+			return null;
+		}
+	}
+
+	static async getOneComment(commentId: string): Promise<ApiTypes.ICommentModel | null>{
+		try {
+			return await commentsCollection.findOne({id: commentId}, { projection: { ...DEFAULT_PROJECTION }});
+		} catch (error) {
+			console.error(error);
 			return null;
 		}
 	}

@@ -89,10 +89,11 @@ class QueryRepository {
             }
         });
     }
-    static getUser(login) {
+    static getUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield db_1.usersCollection.findOne({ login }, { projection: Object.assign({}, DEFAULT_PROJECTION) });
+                let user = yield db_1.usersCollection.findOne({ id }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { hasPassword: false, createdAt: false }) });
+                return user;
             }
             catch (error) {
                 console.error(error);
@@ -133,6 +134,17 @@ class QueryRepository {
             }
             catch (error) {
                 console.error(`error --> getUsers - ${error}`);
+                return null;
+            }
+        });
+    }
+    static getOneComment(commentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield db_1.commentsCollection.findOne({ id: commentId }, { projection: Object.assign({}, DEFAULT_PROJECTION) });
+            }
+            catch (error) {
+                console.error(error);
                 return null;
             }
         });

@@ -1,4 +1,4 @@
-import { checkAuth } from '../utils/checkAuth';
+import { checkBasicAuth } from '../utils/checkBasicAuth';
 import express, {Request, Response} from 'express';
 import { ApiTypes } from '../types/types';
 import { checkError } from '../utils/checkError';
@@ -31,7 +31,7 @@ routerPosts.get('/:id', async (req: Request<{id: string}>, res: Response<ApiType
 	res.send(foundedPost);
 })
 
-routerPosts.post('/', checkAuth, createAndUpdatePostsValidator, checkError, async (req: Request<{}, {}, ApiTypes.ICreateAndUpdateBlogParams>, res: Response<ApiTypes.IPost | boolean>) => {
+routerPosts.post('/', checkBasicAuth, createAndUpdatePostsValidator, checkError, async (req: Request<{}, {}, ApiTypes.ICreateAndUpdateBlogParams>, res: Response<ApiTypes.IPost | boolean>) => {
 	let {blogId, content, shortDescription, title} = req.body;
 	let newPost = await PostService.createPost({blogId, content, shortDescription, title});
 
@@ -42,7 +42,7 @@ routerPosts.post('/', checkAuth, createAndUpdatePostsValidator, checkError, asyn
 })
 
 
-routerPosts.put('/:id', checkAuth, createAndUpdatePostsValidator, checkError, async (req: Request<{id: string}, {}, ApiTypes.ICreateAndUpdateBlogParams>, res: Response) => {
+routerPosts.put('/:id', checkBasicAuth, createAndUpdatePostsValidator, checkError, async (req: Request<{id: string}, {}, ApiTypes.ICreateAndUpdateBlogParams>, res: Response) => {
 	let {blogId,content, shortDescription, title} = req.body;
 	let {id} = req.params;
 	let isUpdatedBPost = await PostService.updatePost({id, blogId, content, shortDescription, title});
@@ -53,7 +53,7 @@ routerPosts.put('/:id', checkAuth, createAndUpdatePostsValidator, checkError, as
 	res.sendStatus(204);
 })
 
-routerPosts.delete('/:id', checkAuth, async (req: Request<{id: string}>, res: Response) => {
+routerPosts.delete('/:id', checkBasicAuth, async (req: Request<{id: string}>, res: Response) => {
 	let {id} = req.params;
 	let isDeletesPost = await PostService.deletePost(id);
 	if(!isDeletesPost){
