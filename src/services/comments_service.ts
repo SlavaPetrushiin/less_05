@@ -38,4 +38,8 @@ export class CommentsService {
 	static async deleteComment(commentId: string) {
 		return CommentsRepository.deleteComment(commentId);
 	}
+
+	static async deleteAllComments(){
+		return CommentsRepository.deleteAllComments();
+	}
 }

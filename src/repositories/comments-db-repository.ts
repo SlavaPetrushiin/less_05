@@ -34,6 +34,15 @@ class CommentsRepositoryModel {
 			return false;
 		}
 	}
+
+	public async deleteAllComments (){
+		try {
+			let result = await commentsCollection.deleteMany({});
+			return result.deletedCount > 0 ? true : false;
+		} catch (error) {
+			
+		}
+	}
 }
 
 export const CommentsRepository = new CommentsRepositoryModel();

@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerTesting = void 0;
+const comments_service_1 = require("./../services/comments_service");
 const users_service_1 = require("./../services/users_service");
 const posts_service_1 = require("./../services/posts_service");
 const blogs_service_1 = require("./../services/blogs_service");
@@ -22,5 +23,6 @@ exports.routerTesting.delete('/all-data', (req, res) => __awaiter(void 0, void 0
     yield blogs_service_1.BlogsService.deleteAllBlogs();
     yield posts_service_1.PostService.deleteAllBPosts();
     yield users_service_1.UsersService.deleteUsers();
+    yield comments_service_1.CommentsService.deleteAllComments();
     res.sendStatus(204);
 }));

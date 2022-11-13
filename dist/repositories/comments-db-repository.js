@@ -51,5 +51,15 @@ class CommentsRepositoryModel {
             }
         });
     }
+    deleteAllComments() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let result = yield db_1.commentsCollection.deleteMany({});
+                return result.deletedCount > 0 ? true : false;
+            }
+            catch (error) {
+            }
+        });
+    }
 }
 exports.CommentsRepository = new CommentsRepositoryModel();

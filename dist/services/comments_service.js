@@ -42,5 +42,10 @@ class CommentsService {
             return comments_db_repository_1.CommentsRepository.deleteComment(commentId);
         });
     }
+    static deleteAllComments() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return comments_db_repository_1.CommentsRepository.deleteAllComments();
+        });
+    }
 }
 exports.CommentsService = CommentsService;
