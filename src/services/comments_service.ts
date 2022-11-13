@@ -20,6 +20,7 @@ export class CommentsService {
 			postId
 		}
 		let result = await CommentsRepository.createComments(newComments);
+
 		return result ? {id: newComments.id, content: newComments.content, userId: newComments.userId, userLogin: newComments.userLogin, createdAt: newComments.createdAt} : false;
 	}
 

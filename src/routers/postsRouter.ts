@@ -1,3 +1,4 @@
+import { checkBearerAuth } from './../utils/checkBearerAuth';
 import { CommentsService } from './../services/comments_service';
 import { checkBasicAuth } from '../utils/checkBasicAuth';
 import express, {Request, Response} from 'express';
@@ -80,17 +81,19 @@ routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Re
 	res.sendStatus(204);
 })
 
-routerPosts.post('/:postId/comments', checkBasicAuth, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
+routerPosts.post('/:postId/comments', checkBearerAuth, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
 	let {postId} = req.params;
 	let {content} = req.body;
+
 	let user = req.user;
 	
 	let foundedPost = await QueryRepository.getOnePost(postId);
+
 	if(!foundedPost){
 		return res.sendStatus(404);
 	}
 
-	let createdComment = CommentsService.createComments(user!, content, postId);
+	let createdComment = await CommentsService.createComments(user!, content, postId);
 
 	if(!createdComment){
 		return res.sendStatus(404);

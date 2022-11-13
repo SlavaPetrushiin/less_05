@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerPosts = void 0;
+const checkBearerAuth_1 = require("./../utils/checkBearerAuth");
 const comments_service_1 = require("./../services/comments_service");
 const checkBasicAuth_1 = require("../utils/checkBasicAuth");
 const express_1 = __importDefault(require("express"));
@@ -76,7 +77,7 @@ exports.routerPosts.get('/:postId/comments', checkQueryCommentsByPostID_1.checkQ
     let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection }, postId);
     res.sendStatus(204);
 }));
-exports.routerPosts.post('/:postId/comments', checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.post('/:postId/comments', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { postId } = req.params;
     let { content } = req.body;
     let user = req.user;
@@ -84,7 +85,7 @@ exports.routerPosts.post('/:postId/comments', checkBasicAuth_1.checkBasicAuth, (
     if (!foundedPost) {
         return res.sendStatus(404);
     }
-    let createdComment = comments_service_1.CommentsService.createComments(user, content, postId);
+    let createdComment = yield comments_service_1.CommentsService.createComments(user, content, postId);
     if (!createdComment) {
         return res.sendStatus(404);
     }
