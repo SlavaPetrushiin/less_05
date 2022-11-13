@@ -20,9 +20,9 @@ const checkBasicAuth_1 = require("../utils/checkBasicAuth");
 const express_1 = __importDefault(require("express"));
 const checkError_1 = require("../utils/checkError");
 const blogs_service_1 = require("../services/blogs_service");
-const checkQuery_1 = require("../utils/checkQuery");
+const checkQueryPostsAndBlogs_1 = require("../utils/checkQueryPostsAndBlogs");
 exports.routerBlogs = express_1.default.Router();
-exports.routerBlogs.get('/', checkQuery_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.get('/', checkQueryPostsAndBlogs_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.baseUrl);
     let { searchNameTerm, pageNumber, pageSize, sortBy, sortDirection } = req.query;
     let blogs = yield query_db_repository_1.QueryRepository.getAllBlogs({
@@ -49,7 +49,7 @@ exports.routerBlogs.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, 
     }
     return res.send(blog);
 }));
-exports.routerBlogs.get('/:id/posts', checkQuery_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerBlogs.get('/:id/posts', checkQueryPostsAndBlogs_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;
     let blog = yield query_db_repository_1.QueryRepository.getOneBlog(id);
     if (!blog)

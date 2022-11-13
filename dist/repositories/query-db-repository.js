@@ -105,7 +105,6 @@ class QueryRepository {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = params;
-                console.log(pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection);
                 let skip = (+pageNumber - 1) * +pageSize;
                 let result = yield db_1.usersCollection.find({
                     $or: [
@@ -146,6 +145,24 @@ class QueryRepository {
             catch (error) {
                 console.error(error);
                 return null;
+            }
+        });
+    }
+    static getCommentsByPostID(queries) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let { pageNumber, pageSize, sortBy, sortDirection } = queries;
+                let skip = (+pageNumber - 1) * +pageSize;
+                // let result = await commentsCollection.find(
+                // 	{userId},
+                // 	{ projection: { ...DEFAULT_PROJECTION } }
+                // )
+                // 	.skip(skip)
+                // 	.limit(+pageSize)
+                // 	.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
+                // 	.toArray();
+            }
+            catch (error) {
             }
         });
     }

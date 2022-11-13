@@ -1,11 +1,13 @@
+import { CommentsService } from './../services/comments_service';
 import { checkBasicAuth } from '../utils/checkBasicAuth';
 import express, {Request, Response} from 'express';
 import { ApiTypes } from '../types/types';
 import { checkError } from '../utils/checkError';
 import { createAndUpdatePostsValidator } from '../validators/postsValidator';
 import { PostService } from '../services/posts_service';
-import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQuery';
+import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQueryPostsAndBlogs';
 import { QueryRepository } from '../repositories/query-db-repository';
+import { checkQueryCommentsByPostID, ICommentsByPostID } from '../utils/checkQueryCommentsByPostID';
 
 export const routerPosts = express.Router();
 
@@ -41,7 +43,6 @@ routerPosts.post('/', checkBasicAuth, createAndUpdatePostsValidator, checkError,
 	res.status(201).send(newPost);
 })
 
-
 routerPosts.put('/:id', checkBasicAuth, createAndUpdatePostsValidator, checkError, async (req: Request<{id: string}, {}, ApiTypes.ICreateAndUpdateBlogParams>, res: Response) => {
 	let {blogId,content, shortDescription, title} = req.body;
 	let {id} = req.params;
@@ -61,4 +62,40 @@ routerPosts.delete('/:id', checkBasicAuth, async (req: Request<{id: string}>, re
 	}
 
 	res.sendStatus(204);
+})
+
+
+routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Request<{postId: string}, {}, {}, ICommentsByPostID>, res: Response) => {
+	let {postId} = req.params;
+	let {pageNumber,pageSize, sortBy, sortDirection} = req.query;
+
+	let foundedPost = await QueryRepository.getOnePost(postId);
+
+	if(!foundedPost){
+		return res.sendStatus(404);
+	}
+	
+	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber! ,pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!})
+
+	res.sendStatus(204);
+})
+
+routerPosts.post('/:postId/comments', checkBasicAuth, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
+	let {postId} = req.params;
+	let {content} = req.body;
+	let user = req.user;
+	
+	let foundedPost = await QueryRepository.getOnePost(postId);
+	if(!foundedPost){
+		return res.sendStatus(404);
+	}
+
+	let createdComment = CommentsService.createComments(user!, content);
+
+	if(!createdComment){
+		return res.sendStatus(404);
+	}
+	
+
+	res.send(createdComment);
 })

@@ -1,4 +1,5 @@
 import { ApiTypes } from '../types/types';
+import { ICommentsByPostID } from '../utils/checkQueryCommentsByPostID';
 import { IQueryUsers } from '../utils/checkQueryUsers';
 import { BlogsRepository } from './blogs-db-repository';
 import { blogsCollection, postsCollection, usersCollection, commentsCollection } from "./db";
@@ -111,10 +112,10 @@ export class QueryRepository {
 		}
 	}
 
-	static async getUser(params: {login?: string, id?: string}): Promise<ApiTypes.IUserDB | null> {
+	static async getUser(params: { login?: string, id?: string }): Promise<ApiTypes.IUserDB | null> {
 		try {
-	
-			let user = await usersCollection.findOne(params, { projection: { ...DEFAULT_PROJECTION  } });
+
+			let user = await usersCollection.findOne(params, { projection: { ...DEFAULT_PROJECTION } });
 			return user;
 		} catch (error) {
 			console.error("getUser: ", error);
@@ -125,7 +126,7 @@ export class QueryRepository {
 	static async getUsers(params: Required<IQueryUsers>): Promise<IUsersDBModel | null> {
 		try {
 			let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = params;
-			console.log(pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection);
+
 			let skip = (+pageNumber - 1) * +pageSize;
 
 			let result = await usersCollection.find(
@@ -163,12 +164,31 @@ export class QueryRepository {
 		}
 	}
 
-	static async getOneComment(commentId: string): Promise<ApiTypes.ICommentModel | null>{
+	static async getOneComment(commentId: string): Promise<ApiTypes.ICommentModel | null> {
 		try {
-			return await commentsCollection.findOne({id: commentId}, { projection: { ...DEFAULT_PROJECTION }});
+			return await commentsCollection.findOne({ id: commentId }, { projection: { ...DEFAULT_PROJECTION } });
 		} catch (error) {
 			console.error(error);
 			return null;
+		}
+	}
+
+	static async getCommentsByPostID(queries: Required<ICommentsByPostID>) {
+		try {
+			let { pageNumber, pageSize, sortBy, sortDirection } = queries;
+			let skip = (+pageNumber - 1) * +pageSize;
+
+			// let result = await commentsCollection.find(
+			// 	{userId},
+			// 	{ projection: { ...DEFAULT_PROJECTION } }
+			// )
+			// 	.skip(skip)
+			// 	.limit(+pageSize)
+			// 	.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
+			// 	.toArray();
+
+		} catch (error) {
+
 		}
 	}
 }

@@ -6,7 +6,7 @@ import express, { Request, Response } from 'express';
 import { ApiTypes } from '../types/types';
 import { checkError } from '../utils/checkError';
 import { BlogsService } from '../services/blogs_service';
-import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQuery';
+import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQueryPostsAndBlogs';
 
 export const routerBlogs = express.Router();
 

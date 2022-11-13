@@ -13,15 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerPosts = void 0;
+const comments_service_1 = require("./../services/comments_service");
 const checkBasicAuth_1 = require("../utils/checkBasicAuth");
 const express_1 = __importDefault(require("express"));
 const checkError_1 = require("../utils/checkError");
 const postsValidator_1 = require("../validators/postsValidator");
 const posts_service_1 = require("../services/posts_service");
-const checkQuery_1 = require("../utils/checkQuery");
+const checkQueryPostsAndBlogs_1 = require("../utils/checkQueryPostsAndBlogs");
 const query_db_repository_1 = require("../repositories/query-db-repository");
+const checkQueryCommentsByPostID_1 = require("../utils/checkQueryCommentsByPostID");
 exports.routerPosts = express_1.default.Router();
-exports.routerPosts.get('/', checkQuery_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.get('/', checkQueryPostsAndBlogs_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { pageNumber, pageSize, sortBy, sortDirection } = req.query;
     let posts = yield query_db_repository_1.QueryRepository.getPosts({
         pageNumber: pageNumber,
@@ -63,4 +65,28 @@ exports.routerPosts.delete('/:id', checkBasicAuth_1.checkBasicAuth, (req, res) =
         return res.sendStatus(404);
     }
     res.sendStatus(204);
+}));
+exports.routerPosts.get('/:postId/comments', checkQueryCommentsByPostID_1.checkQueryCommentsByPostID, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { postId } = req.params;
+    let { pageNumber, pageSize, sortBy, sortDirection } = req.query;
+    let foundedPost = yield query_db_repository_1.QueryRepository.getOnePost(postId);
+    if (!foundedPost) {
+        return res.sendStatus(404);
+    }
+    let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection });
+    res.sendStatus(204);
+}));
+exports.routerPosts.post('/:postId/comments', checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { postId } = req.params;
+    let { content } = req.body;
+    let user = req.user;
+    let foundedPost = yield query_db_repository_1.QueryRepository.getOnePost(postId);
+    if (!foundedPost) {
+        return res.sendStatus(404);
+    }
+    let createdComment = comments_service_1.CommentsService.createComments(user, content);
+    if (!createdComment) {
+        return res.sendStatus(404);
+    }
+    res.send(createdComment);
 }));
