@@ -75,7 +75,7 @@ routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Re
 		return res.sendStatus(404);
 	}
 	
-	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber! ,pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!})
+	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber! ,pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!}, postId)
 
 	res.sendStatus(204);
 })
@@ -90,7 +90,7 @@ routerPosts.post('/:postId/comments', checkBasicAuth, async (req: Request<{postI
 		return res.sendStatus(404);
 	}
 
-	let createdComment = CommentsService.createComments(user!, content);
+	let createdComment = CommentsService.createComments(user!, content, postId);
 
 	if(!createdComment){
 		return res.sendStatus(404);

@@ -73,7 +73,7 @@ exports.routerPosts.get('/:postId/comments', checkQueryCommentsByPostID_1.checkQ
     if (!foundedPost) {
         return res.sendStatus(404);
     }
-    let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection });
+    let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection }, postId);
     res.sendStatus(204);
 }));
 exports.routerPosts.post('/:postId/comments', checkBasicAuth_1.checkBasicAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,7 +84,7 @@ exports.routerPosts.post('/:postId/comments', checkBasicAuth_1.checkBasicAuth, (
     if (!foundedPost) {
         return res.sendStatus(404);
     }
-    let createdComment = comments_service_1.CommentsService.createComments(user, content);
+    let createdComment = comments_service_1.CommentsService.createComments(user, content, postId);
     if (!createdComment) {
         return res.sendStatus(404);
     }

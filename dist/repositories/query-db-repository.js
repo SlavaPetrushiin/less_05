@@ -148,21 +148,29 @@ class QueryRepository {
             }
         });
     }
-    static getCommentsByPostID(queries) {
+    static getCommentsByPostID(queries, postId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { pageNumber, pageSize, sortBy, sortDirection } = queries;
                 let skip = (+pageNumber - 1) * +pageSize;
-                // let result = await commentsCollection.find(
-                // 	{userId},
-                // 	{ projection: { ...DEFAULT_PROJECTION } }
-                // )
-                // 	.skip(skip)
-                // 	.limit(+pageSize)
-                // 	.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
-                // 	.toArray();
+                let result = yield db_1.commentsCollection.find({ postId }, { projection: Object.assign({}, DEFAULT_PROJECTION) })
+                    .skip(skip)
+                    .limit(+pageSize)
+                    .sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
+                    .toArray();
+                let totalCount = yield db_1.commentsCollection.countDocuments({ postId });
+                let pageCount = Math.ceil(totalCount / +pageSize);
+                return {
+                    pagesCount: pageCount,
+                    page: +pageNumber,
+                    pageSize: +pageSize,
+                    totalCount,
+                    items: result
+                };
             }
             catch (error) {
+                console.error(`error --> getCommentsByPostID - ${error}`);
+                return null;
             }
         });
     }

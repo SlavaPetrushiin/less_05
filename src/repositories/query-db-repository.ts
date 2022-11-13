@@ -173,22 +173,33 @@ export class QueryRepository {
 		}
 	}
 
-	static async getCommentsByPostID(queries: Required<ICommentsByPostID>) {
+	static async getCommentsByPostID(queries: Required<ICommentsByPostID>, postId: string) {
 		try {
 			let { pageNumber, pageSize, sortBy, sortDirection } = queries;
 			let skip = (+pageNumber - 1) * +pageSize;
 
-			// let result = await commentsCollection.find(
-			// 	{userId},
-			// 	{ projection: { ...DEFAULT_PROJECTION } }
-			// )
-			// 	.skip(skip)
-			// 	.limit(+pageSize)
-			// 	.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
-			// 	.toArray();
+			let result = await commentsCollection.find(
+				{ postId },
+				{ projection: { ...DEFAULT_PROJECTION } }
+			)
+				.skip(skip)
+				.limit(+pageSize)
+				.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
+				.toArray();
+
+			let totalCount = await commentsCollection.countDocuments({ postId })
+			let pageCount = Math.ceil(totalCount / +pageSize);
+			return {
+				pagesCount: pageCount,
+				page: +pageNumber,
+				pageSize: +pageSize,
+				totalCount,
+				items: result
+			}
 
 		} catch (error) {
-
+			console.error(`error --> getCommentsByPostID - ${error}`);
+			return null;
 		}
 	}
 }

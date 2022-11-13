@@ -13,7 +13,7 @@ exports.CommentsService = void 0;
 const comments_db_repository_1 = require("./../repositories/comments-db-repository");
 const query_db_repository_1 = require("./../repositories/query-db-repository");
 class CommentsService {
-    static createComments(user, comment) {
+    static createComments(user, comment, postId) {
         return __awaiter(this, void 0, void 0, function* () {
             const newComments = {
                 id: (new Date().getMilliseconds()).toString(),
@@ -21,9 +21,10 @@ class CommentsService {
                 userId: user.userId,
                 userLogin: user.login,
                 createdAt: new Date().toISOString(),
+                postId
             };
             let result = yield comments_db_repository_1.CommentsRepository.createComments(newComments);
-            return result ? newComments : false;
+            return result ? { id: newComments.id, content: newComments.content, userId: newComments.userId, userLogin: newComments.userLogin, createdAt: newComments.createdAt } : false;
         });
     }
     static updateComment(commentId, content, user) {

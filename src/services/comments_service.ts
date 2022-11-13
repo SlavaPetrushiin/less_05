@@ -10,16 +10,17 @@ interface ICreatePost {
 }
 
 export class CommentsService {
-	static async createComments(user: ICreatePost, comment: string) {
+	static async createComments(user: ICreatePost, comment: string, postId: string) {
 		const newComments: ApiTypes.ICommentModel = {
 			id: (new Date().getMilliseconds()).toString(),
 			content: comment,
 			userId: user.userId,
 			userLogin: user.login,
 			createdAt: new Date().toISOString(),
+			postId
 		}
 		let result = await CommentsRepository.createComments(newComments);
-		return result ? newComments : false;
+		return result ? {id: newComments.id, content: newComments.content, userId: newComments.userId, userLogin: newComments.userLogin, createdAt: newComments.createdAt} : false;
 	}
 
 	static async updateComment(commentId: string, content: string, user: { email: string; login: string; userId: string; }) {
