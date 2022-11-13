@@ -15,7 +15,7 @@ export const checkBearerAuth = async (req: Request, res: Response, next: NextFun
 		return res.sendStatus(401);
 	}
 
-	let user = await QueryRepository.getUser(userId);
+	let user = await QueryRepository.getUser({id: userId});
 
 	if(!user){
 		return res.sendStatus(401);

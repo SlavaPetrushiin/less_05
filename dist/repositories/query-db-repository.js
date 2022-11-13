@@ -89,14 +89,14 @@ class QueryRepository {
             }
         });
     }
-    static getUser(id) {
+    static getUser(params) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let user = yield db_1.usersCollection.findOne({ id }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { hasPassword: false, createdAt: false }) });
+                let user = yield db_1.usersCollection.findOne(params, { projection: Object.assign({}, DEFAULT_PROJECTION) });
                 return user;
             }
             catch (error) {
-                console.error(error);
+                console.error("getUser: ", error);
                 return null;
             }
         });

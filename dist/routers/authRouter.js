@@ -26,6 +26,7 @@ exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => _
 }));
 exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password } = req.body;
+    console.log(login, password);
     let user = yield users_service_1.UsersService.login(login, password);
     if (!user) {
         res.sendStatus(401);

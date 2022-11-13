@@ -39,7 +39,7 @@ function comparePassword(password, hash) {
 class UsersService {
     static login(login, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            let user = yield query_db_repository_1.QueryRepository.getUser(login);
+            let user = yield query_db_repository_1.QueryRepository.getUser({ login });
             console.log(user);
             if (!user) {
                 return null;

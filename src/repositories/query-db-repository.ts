@@ -111,12 +111,13 @@ export class QueryRepository {
 		}
 	}
 
-	static async getUser(id: string): Promise<ApiTypes.IUserDB | null> {
+	static async getUser(params: {login?: string, id?: string}): Promise<ApiTypes.IUserDB | null> {
 		try {
-			let user = await usersCollection.findOne({ id }, { projection: { ...DEFAULT_PROJECTION, hasPassword: false, createdAt: false  } });
+	
+			let user = await usersCollection.findOne(params, { projection: { ...DEFAULT_PROJECTION  } });
 			return user;
 		} catch (error) {
-			console.error(error);
+			console.error("getUser: ", error);
 			return null;
 		}
 	}

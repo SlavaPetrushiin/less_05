@@ -29,9 +29,6 @@ enum FIELDS_FOR_SORTBY {
 
 export function checkQueryUsers(req: Request<{}, {}, {}, IQueryUsers>, res: Response, next: NextFunction) {
 	let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
-	console.log("sortBy: ", sortBy);
-	
-console.log("Object.values: ", Object.values(FIELDS_FOR_SORTBY));
 
 	if (!searchEmailTerm) {
 		req.query.searchEmailTerm = DEFAULT_QUERY.searchEmailTerm;

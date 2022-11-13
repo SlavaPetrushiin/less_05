@@ -18,6 +18,7 @@ routerAuth.get('/me', checkBearerAuth,  async (req: Request<{}, {}, ILogin>, res
 
 routerAuth.post('/login', loginValidator, checkErrorAuth,  async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let {login, password} = req.body;
+	console.log(login, password);
 	let user = await UsersService.login(login, password);
 	if(!user){
 		res.sendStatus(401);

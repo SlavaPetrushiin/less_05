@@ -18,8 +18,6 @@ var FIELDS_FOR_SORTBY;
 })(FIELDS_FOR_SORTBY || (FIELDS_FOR_SORTBY = {}));
 function checkQueryUsers(req, res, next) {
     let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
-    console.log("sortBy: ", sortBy);
-    console.log("Object.values: ", Object.values(FIELDS_FOR_SORTBY));
     if (!searchEmailTerm) {
         req.query.searchEmailTerm = DEFAULT_QUERY.searchEmailTerm;
     }

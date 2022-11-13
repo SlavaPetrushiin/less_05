@@ -21,7 +21,7 @@ const checkBearerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     if (!userId) {
         return res.sendStatus(401);
     }
-    let user = yield query_db_repository_1.QueryRepository.getUser(userId);
+    let user = yield query_db_repository_1.QueryRepository.getUser({ id: userId });
     if (!user) {
         return res.sendStatus(401);
     }

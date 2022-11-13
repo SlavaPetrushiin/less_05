@@ -27,7 +27,7 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 
 export class UsersService {
 	static async login(login: string, password: string): Promise<ApiTypes.IUserDB | null>{
-		let user = await QueryRepository.getUser(login);
+		let user = await QueryRepository.getUser({login});
 		console.log(user);
 		if(!user){
 			return null;
