@@ -76,7 +76,7 @@ routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Re
 		return res.sendStatus(404);
 	}
 	
-	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber! ,pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!}, postId)
+	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber!, pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!}, postId)
 
 	res.status(200).send(comments);
 })
