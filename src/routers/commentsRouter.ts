@@ -31,17 +31,17 @@ routerComments.put('/:commentId', checkBearerAuth, async (req: Request<{commentI
 	let comment = await QueryRepository.getOneComment(commentId);
 
 	if(!comment){
-		res.sendStatus(404);
+		return res.sendStatus(404);
 	}
 
 	if(comment?.userId != req.user?.userId){
-		res.sendStatus(403);
+		return res.sendStatus(403);
 	}
 
 	let isUpdatedComment = CommentsService.updateComment(commentId, content, req.user!);
 
 	if(!isUpdatedComment){
-		res.sendStatus(404);
+		return res.sendStatus(404);
 	}
 
 	res.sendStatus(204);
@@ -52,17 +52,17 @@ routerComments.delete('/:commentId', checkBearerAuth, async (req: Request<{comme
 	let comment = await QueryRepository.getOneComment(commentId);
 
 	if(!comment){
-		res.sendStatus(404);
+		return res.sendStatus(404);
 	}
 
 	if(comment?.userId != req.user?.userId){
-		res.sendStatus(403);
+		return res.sendStatus(403);
 	}
 
 	let isDeleted = await CommentsService.deleteComment(commentId);
 
 	if(!isDeleted){
-		res.sendStatus(404);
+		return res.sendStatus(404);
 	}
 
 	res.sendStatus(204);
