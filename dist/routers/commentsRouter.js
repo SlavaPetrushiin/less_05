@@ -56,7 +56,11 @@ exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, (re
 exports.routerComments.delete('/:commentId', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     let commentId = req.params.commentId;
-    if (commentId != ((_b = req.user) === null || _b === void 0 ? void 0 : _b.userId)) {
+    let comment = yield query_db_repository_1.QueryRepository.getOneComment(commentId);
+    if (!comment) {
+        res.sendStatus(404);
+    }
+    if ((comment === null || comment === void 0 ? void 0 : comment.userId) != ((_b = req.user) === null || _b === void 0 ? void 0 : _b.userId)) {
         res.sendStatus(403);
     }
     let isDeleted = yield comments_service_1.CommentsService.deleteComment(commentId);

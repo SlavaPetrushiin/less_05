@@ -51,8 +51,13 @@ routerComments.put('/:commentId', checkBearerAuth, async (req: Request<{commentI
 
 routerComments.delete('/:commentId', checkBearerAuth, async (req: Request<{commentId: string}>, res) => {
 	let commentId = req.params.commentId;
+	let comment = await QueryRepository.getOneComment(commentId);
 
-	if(commentId != req.user?.userId){
+	if(!comment){
+		res.sendStatus(404);
+	}
+
+	if(comment?.userId != req.user?.userId){
 		res.sendStatus(403);
 	}
 
