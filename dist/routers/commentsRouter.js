@@ -44,7 +44,11 @@ exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, (re
     var _a;
     let commentId = req.params.commentId;
     let content = req.body.content;
-    if (commentId != ((_a = req.user) === null || _a === void 0 ? void 0 : _a.userId)) {
+    let comment = yield query_db_repository_1.QueryRepository.getOneComment(commentId);
+    if (!comment) {
+        res.sendStatus(404);
+    }
+    if ((comment === null || comment === void 0 ? void 0 : comment.userId) != ((_a = req.user) === null || _a === void 0 ? void 0 : _a.userId)) {
         res.sendStatus(403);
     }
     let isUpdatedComment = comments_service_1.CommentsService.updateComment(commentId, content, req.user);

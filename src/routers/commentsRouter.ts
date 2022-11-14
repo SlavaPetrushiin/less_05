@@ -36,7 +36,13 @@ routerComments.put('/:commentId', checkBearerAuth, async (req: Request<{commentI
 	let commentId = req.params.commentId;
 	let content = req.body.content;
 
-	if(commentId != req.user?.userId){
+	let comment = await QueryRepository.getOneComment(commentId);
+
+	if(!comment){
+		res.sendStatus(404);
+	}
+
+	if(comment?.userId != req.user?.userId){
 		res.sendStatus(403);
 	}
 
