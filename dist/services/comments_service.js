@@ -24,7 +24,15 @@ class CommentsService {
                 postId
             };
             let result = yield comments_db_repository_1.CommentsRepository.createComments(newComments);
-            return result ? { id: newComments.id, content: newComments.content, userId: newComments.userId, userLogin: newComments.userLogin, createdAt: newComments.createdAt } : false;
+            return result
+                ? {
+                    id: newComments.id,
+                    content: newComments.content,
+                    userId: newComments.userId,
+                    userLogin: newComments.userLogin,
+                    createdAt: newComments.createdAt
+                }
+                : false;
         });
     }
     static updateComment(commentId, content, user) {

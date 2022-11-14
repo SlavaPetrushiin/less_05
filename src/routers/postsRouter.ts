@@ -78,7 +78,7 @@ routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Re
 	
 	let comments = await QueryRepository.getCommentsByPostID({pageNumber: pageNumber! ,pageSize: pageSize!, sortBy: sortBy!, sortDirection: sortDirection!}, postId)
 
-	res.sendStatus(200);
+	res.status(200).send(comments);
 })
 
 routerPosts.post('/:postId/comments', checkBearerAuth, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
@@ -94,7 +94,6 @@ routerPosts.post('/:postId/comments', checkBearerAuth, async (req: Request<{post
 	}
 
 	let createdComment = await CommentsService.createComments(user!, content, postId);
-
 	if(!createdComment){
 		return res.sendStatus(404);
 	}

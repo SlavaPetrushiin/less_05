@@ -75,7 +75,7 @@ exports.routerPosts.get('/:postId/comments', checkQueryCommentsByPostID_1.checkQ
         return res.sendStatus(404);
     }
     let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection }, postId);
-    res.sendStatus(200);
+    res.status(200).send(comments);
 }));
 exports.routerPosts.post('/:postId/comments', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { postId } = req.params;

@@ -21,7 +21,15 @@ export class CommentsService {
 		}
 		let result = await CommentsRepository.createComments(newComments);
 
-		return result ? {id: newComments.id, content: newComments.content, userId: newComments.userId, userLogin: newComments.userLogin, createdAt: newComments.createdAt} : false;
+		return result
+			? {
+				id: newComments.id,
+				content: newComments.content,
+				userId: newComments.userId,
+				userLogin: newComments.userLogin,
+				createdAt: newComments.createdAt
+			}
+			: false;
 	}
 
 	static async updateComment(commentId: string, content: string, user: { email: string; login: string; userId: string; }) {
@@ -41,7 +49,7 @@ export class CommentsService {
 		return CommentsRepository.deleteComment(commentId);
 	}
 
-	static async deleteAllComments(){
+	static async deleteAllComments() {
 		return CommentsRepository.deleteAllComments();
 	}
 }
