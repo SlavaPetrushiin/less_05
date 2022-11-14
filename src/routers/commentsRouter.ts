@@ -24,14 +24,6 @@ routerComments.get('/:id',async (req: Request<{id: string}>, res) => {
 	res.send(comment)
 })
 
-// routerComments.post('/', checkBearerAuth, async (req: Request<{}, {}, {content: string}>, res: Response) => {
-// 	let comment = req.body.content;
-// 	let user = req.user;
-// 	let newComments = await CommentsService.createComments(user!, comment, );
-// 	if (!newComments) return res.sendStatus(400);
-// 	return res.status(201).send(newComments);
-// })
-
 routerComments.put('/:commentId', checkBearerAuth, async (req: Request<{commentId: string}, {}, {content: string}>, res: Response) => {
 	let commentId = req.params.commentId;
 	let content = req.body.content;

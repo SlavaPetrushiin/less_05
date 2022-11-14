@@ -33,13 +33,6 @@ exports.routerComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 
     }
     res.send(comment);
 }));
-// routerComments.post('/', checkBearerAuth, async (req: Request<{}, {}, {content: string}>, res: Response) => {
-// 	let comment = req.body.content;
-// 	let user = req.user;
-// 	let newComments = await CommentsService.createComments(user!, comment, );
-// 	if (!newComments) return res.sendStatus(400);
-// 	return res.status(201).send(newComments);
-// })
 exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     let commentId = req.params.commentId;
