@@ -164,9 +164,18 @@ export class QueryRepository {
 		}
 	}
 
+	static async getComments(): Promise<ApiTypes.ICommentModel[] | null> {
+		try {
+			return await commentsCollection.find({}, { projection: { ...DEFAULT_PROJECTION, postId: false } }).toArray();
+		} catch (error) {
+			console.error(error);
+			return null;
+		}
+	}
+
 	static async getOneComment(commentId: string): Promise<ApiTypes.ICommentModel | null> {
 		try {
-			return await commentsCollection.findOne({ id: commentId }, { projection: { ...DEFAULT_PROJECTION } });
+			return await commentsCollection.findOne({ id: commentId }, { projection: { ...DEFAULT_PROJECTION, postId: false } });
 		} catch (error) {
 			console.error(error);
 			return null;

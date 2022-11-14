@@ -137,10 +137,21 @@ class QueryRepository {
             }
         });
     }
+    static getComments() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield db_1.commentsCollection.find({}, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { postId: false }) }).toArray();
+            }
+            catch (error) {
+                console.error(error);
+                return null;
+            }
+        });
+    }
     static getOneComment(commentId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield db_1.commentsCollection.findOne({ id: commentId }, { projection: Object.assign({}, DEFAULT_PROJECTION) });
+                return yield db_1.commentsCollection.findOne({ id: commentId }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { postId: false }) });
             }
             catch (error) {
                 console.error(error);

@@ -18,8 +18,12 @@ const comments_service_1 = require("./../services/comments_service");
 const checkBearerAuth_1 = require("./../utils/checkBearerAuth");
 const express_1 = __importDefault(require("express"));
 exports.routerComments = express_1.default.Router();
-exports.routerComments.get('/', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send(200);
+exports.routerComments.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let comments = yield query_db_repository_1.QueryRepository.getComments();
+    if (!comments) {
+        return res.sendStatus(404);
+    }
+    res.send(comments);
 }));
 exports.routerComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let id = req.params.id;

@@ -5,8 +5,13 @@ import express, {Request, Response} from 'express';
 
 export const routerComments = express.Router();
 
-routerComments.get('/', checkBearerAuth , async (req: Request<{id: string}>, res) => {
-	res.send(200)
+routerComments.get('/', async (req: Request<{id: string}>, res) => {
+	let comments = await QueryRepository.getComments();
+	if(!comments){
+		return res.sendStatus(404)
+	}
+
+	res.send(comments)
 })
 
 routerComments.get('/:id',async (req: Request<{id: string}>, res) => {
