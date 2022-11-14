@@ -23,6 +23,7 @@ const posts_service_1 = require("../services/posts_service");
 const checkQueryPostsAndBlogs_1 = require("../utils/checkQueryPostsAndBlogs");
 const query_db_repository_1 = require("../repositories/query-db-repository");
 const checkQueryCommentsByPostID_1 = require("../utils/checkQueryCommentsByPostID");
+const commentValidator_1 = require("../validators/commentValidator");
 exports.routerPosts = express_1.default.Router();
 exports.routerPosts.get('/', checkQueryPostsAndBlogs_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { pageNumber, pageSize, sortBy, sortDirection } = req.query;
@@ -77,7 +78,7 @@ exports.routerPosts.get('/:postId/comments', checkQueryCommentsByPostID_1.checkQ
     let comments = yield query_db_repository_1.QueryRepository.getCommentsByPostID({ pageNumber: pageNumber, pageSize: pageSize, sortBy: sortBy, sortDirection: sortDirection }, postId);
     res.status(200).send(comments);
 }));
-exports.routerPosts.post('/:postId/comments', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerPosts.post('/:postId/comments', checkBearerAuth_1.checkBearerAuth, commentValidator_1.commentValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { postId } = req.params;
     let { content } = req.body;
     let user = req.user;

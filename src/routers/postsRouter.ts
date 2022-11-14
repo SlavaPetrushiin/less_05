@@ -9,6 +9,7 @@ import { PostService } from '../services/posts_service';
 import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQueryPostsAndBlogs';
 import { QueryRepository } from '../repositories/query-db-repository';
 import { checkQueryCommentsByPostID, ICommentsByPostID } from '../utils/checkQueryCommentsByPostID';
+import { commentValidator } from '../validators/commentValidator';
 
 export const routerPosts = express.Router();
 
@@ -81,7 +82,7 @@ routerPosts.get('/:postId/comments', checkQueryCommentsByPostID,  async (req: Re
 	res.status(200).send(comments);
 })
 
-routerPosts.post('/:postId/comments', checkBearerAuth, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
+routerPosts.post('/:postId/comments', checkBearerAuth, commentValidator, checkError, async (req: Request<{postId: string}, {}, {content: string}>, res: Response) => {
 	let {postId} = req.params;
 	let {content} = req.body;
 

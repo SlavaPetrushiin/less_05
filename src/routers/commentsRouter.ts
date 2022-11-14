@@ -1,7 +1,9 @@
+import { checkError } from './../utils/checkError';
 import { QueryRepository } from './../repositories/query-db-repository';
 import { CommentsService } from './../services/comments_service';
 import { checkBearerAuth } from './../utils/checkBearerAuth';
 import express, {Request, Response} from 'express';
+import { commentValidator } from '../validators/commentValidator';
 
 export const routerComments = express.Router();
 
@@ -24,7 +26,7 @@ routerComments.get('/:id',async (req: Request<{id: string}>, res) => {
 	res.send(comment)
 })
 
-routerComments.put('/:commentId', checkBearerAuth, async (req: Request<{commentId: string}, {}, {content: string}>, res: Response) => {
+routerComments.put('/:commentId', checkBearerAuth, commentValidator, checkError, async (req: Request<{commentId: string}, {}, {content: string}>, res: Response) => {
 	let commentId = req.params.commentId;
 	let content = req.body.content;
 

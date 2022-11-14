@@ -13,10 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerComments = void 0;
+const checkError_1 = require("./../utils/checkError");
 const query_db_repository_1 = require("./../repositories/query-db-repository");
 const comments_service_1 = require("./../services/comments_service");
 const checkBearerAuth_1 = require("./../utils/checkBearerAuth");
 const express_1 = __importDefault(require("express"));
+const commentValidator_1 = require("../validators/commentValidator");
 exports.routerComments = express_1.default.Router();
 exports.routerComments.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let comments = yield query_db_repository_1.QueryRepository.getComments();
@@ -33,7 +35,7 @@ exports.routerComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 
     }
     res.send(comment);
 }));
-exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, commentValidator_1.commentValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     let commentId = req.params.commentId;
     let content = req.body.content;
