@@ -27,7 +27,7 @@ class CommentsRepositoryModel {
     updateComments(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let result = yield db_1.commentsCollection.updateOne({ id: comment.id }, comment);
+                let result = yield db_1.commentsCollection.updateOne({ id: comment.id }, { $set: { content: comment.content } });
                 if (result.matchedCount == 0) {
                     return false;
                 }
@@ -42,7 +42,7 @@ class CommentsRepositoryModel {
     deleteComment(commentId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let result = yield db_1.commentsCollection.deleteOne({ commentId });
+                let result = yield db_1.commentsCollection.deleteOne({ id: commentId });
                 return result.deletedCount > 0 ? true : false;
             }
             catch (error) {

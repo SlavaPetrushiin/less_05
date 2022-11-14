@@ -14,20 +14,23 @@ class CommentsRepositoryModel {
 
 	public async updateComments(comment: ApiTypes.ICommentModel): Promise<boolean> {
 		try {
-			let result = await commentsCollection.updateOne({id: comment.id}, comment);
+
+			let result = await commentsCollection.updateOne({ id: comment.id }, { $set: { content: comment.content }});
+
 			if (result.matchedCount == 0) {
 				return false;
 			}
 			return true;
 		} catch (error) {
+
 			console.error(error);
 			return false;
 		}
 	}
 
-	public async deleteComment(commentId: string){
+	public async deleteComment(commentId: string) {
 		try {
-			let result = await commentsCollection.deleteOne({commentId});
+			let result = await commentsCollection.deleteOne({ id: commentId });
 			return result.deletedCount > 0 ? true : false;
 		} catch (error) {
 			console.log(error);
@@ -35,12 +38,12 @@ class CommentsRepositoryModel {
 		}
 	}
 
-	public async deleteAllComments (){
+	public async deleteAllComments() {
 		try {
 			let result = await commentsCollection.deleteMany({});
 			return result.deletedCount > 0 ? true : false;
 		} catch (error) {
-			
+
 		}
 	}
 }
