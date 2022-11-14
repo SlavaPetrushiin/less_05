@@ -189,7 +189,7 @@ export class QueryRepository {
 
 			let result = await commentsCollection.find(
 				{ postId },
-				{ projection: { ...DEFAULT_PROJECTION } }
+				{ projection: { ...DEFAULT_PROJECTION, postId: false } }
 			)
 				.skip(skip)
 				.limit(+pageSize)

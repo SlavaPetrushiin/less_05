@@ -164,7 +164,7 @@ class QueryRepository {
             try {
                 let { pageNumber, pageSize, sortBy, sortDirection } = queries;
                 let skip = (+pageNumber - 1) * +pageSize;
-                let result = yield db_1.commentsCollection.find({ postId }, { projection: Object.assign({}, DEFAULT_PROJECTION) })
+                let result = yield db_1.commentsCollection.find({ postId }, { projection: Object.assign(Object.assign({}, DEFAULT_PROJECTION), { postId: false }) })
                     .skip(skip)
                     .limit(+pageSize)
                     .sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
