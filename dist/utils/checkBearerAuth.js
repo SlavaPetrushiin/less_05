@@ -14,7 +14,7 @@ const query_db_repository_1 = require("./../repositories/query-db-repository");
 const jwt_service_1 = require("./../services/jwt_service");
 const checkBearerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.headers.authorization) {
-        res.sendStatus(401);
+        return res.sendStatus(401);
     }
     let token = req.headers.authorization.split(" ")[1] || "";
     const userId = yield jwt_service_1.ServiceJWT.getUserIdByToken(token);

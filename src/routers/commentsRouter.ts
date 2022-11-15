@@ -36,7 +36,7 @@ routerComments.put('/:commentId', checkBearerAuth, commentValidator, checkError,
 		return res.sendStatus(404);
 	}
 
-	if(comment?.userId != req.user?.userId){
+	if(comment.userId != req.user!.userId){
 		return res.sendStatus(403);
 	}
 
@@ -57,7 +57,7 @@ routerComments.delete('/:commentId', checkBearerAuth, async (req: Request<{comme
 		return res.sendStatus(404);
 	}
 
-	if(comment?.userId != req.user?.userId){
+	if(comment.userId != req.user!.userId){
 		return res.sendStatus(403);
 	}
 

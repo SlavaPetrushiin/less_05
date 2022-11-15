@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export const checkBearerAuth = async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.headers.authorization) {
-		res.sendStatus(401);
+		return res.sendStatus(401);
 	}
 
 	let token = req.headers.authorization!.split(" ")[1] || "";

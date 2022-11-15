@@ -36,14 +36,13 @@ exports.routerComments.get('/:id', (req, res) => __awaiter(void 0, void 0, void 
     res.send(comment);
 }));
 exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, commentValidator_1.commentValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     let commentId = req.params.commentId;
     let content = req.body.content;
     let comment = yield query_db_repository_1.QueryRepository.getOneComment(commentId);
     if (!comment) {
         return res.sendStatus(404);
     }
-    if ((comment === null || comment === void 0 ? void 0 : comment.userId) != ((_a = req.user) === null || _a === void 0 ? void 0 : _a.userId)) {
+    if (comment.userId != req.user.userId) {
         return res.sendStatus(403);
     }
     let isUpdatedComment = comments_service_1.CommentsService.updateComment(commentId, content, req.user);
@@ -53,13 +52,12 @@ exports.routerComments.put('/:commentId', checkBearerAuth_1.checkBearerAuth, com
     res.sendStatus(204);
 }));
 exports.routerComments.delete('/:commentId', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
     let commentId = req.params.commentId;
     let comment = yield query_db_repository_1.QueryRepository.getOneComment(commentId);
     if (!comment) {
         return res.sendStatus(404);
     }
-    if ((comment === null || comment === void 0 ? void 0 : comment.userId) != ((_b = req.user) === null || _b === void 0 ? void 0 : _b.userId)) {
+    if (comment.userId != req.user.userId) {
         return res.sendStatus(403);
     }
     let isDeleted = yield comments_service_1.CommentsService.deleteComment(commentId);
