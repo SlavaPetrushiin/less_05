@@ -17,9 +17,9 @@ const email_1 = require("../lib/email");
 const bcrypt = require('bcrypt');
 function getUrlWithCode(code) {
     return `
-		<h1>Спасибо за регистрацию</h1>
-		<p>Перейдите по ссылке ниже:
-			<a href='https://somesite.com/confirm-email?${code}'>подтвердите почту</a>
+			<h1>Thank for your registration</h1>
+			<p>To finish registration please follow the link below:
+				<a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
 		</p>
 	`;
 }
@@ -50,6 +50,7 @@ class AuthService {
     static login(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(loginOrEmail);
+            console.log(user);
             if (!user) {
                 return null;
             }

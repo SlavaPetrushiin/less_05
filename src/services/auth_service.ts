@@ -10,9 +10,9 @@ const bcrypt = require('bcrypt');
 
 function getUrlWithCode(code: string): string {
 	return `
-		<h1>Спасибо за регистрацию</h1>
-		<p>Перейдите по ссылке ниже:
-			<a href='https://somesite.com/confirm-email?${code}'>подтвердите почту</a>
+			<h1>Thank for your registration</h1>
+			<p>To finish registration please follow the link below:
+				<a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
 		</p>
 	`
 }
@@ -40,7 +40,8 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 export class AuthService {
 	static async login(loginOrEmail: string, password: string): Promise<ApiTypes.IClientDB | null> {
 		let user = await ClientsRepository.getClientByEmailOrLogin(loginOrEmail);
-			if (!user) {
+		console.log(user);
+		if (!user) {
 			return null;
 		}
 
@@ -57,7 +58,7 @@ export class AuthService {
 		const passwordHash = await hasPassword(password);
 		const id = new Date().getMilliseconds().toString();
 		const createdAt = new Date().toISOString();
-			if (!passwordHash) {
+		if (!passwordHash) {
 			return null;
 		}
 
@@ -86,7 +87,7 @@ export class AuthService {
 		// 	return null;
 		// }
 
-		return client ;
+		return client;
 	}
 
 	static async confirmCode(code: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {

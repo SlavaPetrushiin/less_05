@@ -28,8 +28,6 @@ class EmailSend {
 
 		try {
 			let info = await transporter.sendMail({
-				
-
 				from: "slava91petrushin@yandex.ru", 
 				to: email,
 				html: url,
