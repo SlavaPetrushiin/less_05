@@ -12,7 +12,7 @@ function getUrlWithCode(code: string): string {
 	return `
 		<h1>Спасибо за регистрацию</h1>
 		<p>Перейдите по ссылке ниже:
-			<a href='https://lessfiv.herokuapp.com/confirm-email?${code}'>подтвердите почту</a>
+			<a href='https://somesite.com/confirm-email?${code}'>подтвердите почту</a>
 		</p>
 	`
 }
