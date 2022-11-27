@@ -1,3 +1,4 @@
+import { ClientsRepository } from './../repositories/clients-db-repository';
 import { QueryRepository } from './../repositories/query-db-repository';
 import { UsersService } from './../services/users_service';
 import { ServiceJWT } from './../services/jwt_service';
@@ -9,13 +10,13 @@ export const checkBearerAuth = async (req: Request, res: Response, next: NextFun
 	}
 
 	let token = req.headers.authorization!.split(" ")[1] || "";
-	const userId = await ServiceJWT.getUserIdByToken(token);
+	const userId = await ServiceJWT.getUserIdByToken(token); 
 
 	if(!userId){
 		return res.sendStatus(401);
 	}
 
-	let user = await QueryRepository.getUser({id: userId});
+	let user = await ClientsRepository.getUSerByID(userId);
 
 	if(!user){
 		return res.sendStatus(401);

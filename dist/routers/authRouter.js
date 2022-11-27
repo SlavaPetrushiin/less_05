@@ -17,18 +17,25 @@ const checkBearerAuth_1 = require("./../utils/checkBearerAuth");
 const checkError_1 = require("./../utils/checkError");
 const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
-const users_service_1 = require("./../services/users_service");
 const jwt_service_1 = require("../services/jwt_service");
+const auth_service_1 = require("../services/auth_service");
 exports.routerAuth = express_1.default.Router();
 exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     res.send(user);
 }));
 exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { login, password } = req.body;
-    console.log(login, password);
-    let user = yield users_service_1.UsersService.login(login, password);
+    let { loginOrEmail, password } = req.body;
+    let user = yield auth_service_1.AuthService.login(loginOrEmail, password);
     if (!user) {
+        res.sendStatus(401);
+        return;
+    }
+    if (!user.emailConfirmation.isConfirmed) {
+        res.sendStatus(401);
+        return;
+    }
+    if (!user.emailConfirmation.isConfirmed) {
         res.sendStatus(401);
         return;
     }
@@ -38,4 +45,32 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         return;
     }
     res.send({ accessToken });
+}));
+exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { login, password, email } = req.body;
+    let result = yield auth_service_1.AuthService.registration(login, email, password);
+    if (!result) {
+        res.status(400).send({
+            "message": "Не удалось зарегистрироваться",
+            "field": "email"
+        });
+        return;
+    }
+    res.sendStatus(204);
+}));
+exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { code } = req.body;
+    let result = yield auth_service_1.AuthService.confirmCode(code);
+    if (!result) {
+        res.sendStatus(401);
+    }
+    res.sendStatus(204);
+}));
+exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { email } = req.body;
+    let result = yield auth_service_1.AuthService.confirmResending(email);
+    if (!result) {
+        res.sendStatus(401);
+    }
+    res.sendStatus(204);
 }));

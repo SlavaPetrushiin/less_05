@@ -5,6 +5,7 @@ import { checkError } from './../utils/checkError';
 import express, { Request, Response } from 'express';
 import { userValidator } from '../validators/usersValidator';
 import { checkQueryUsers, IQueryUsers } from '../utils/checkQueryUsers';
+import { AuthService } from '../services/auth_service';
 
 interface ICreateUserInput {
 	login: string;
@@ -36,7 +37,7 @@ routerUsers.get("/", checkBasicAuth, checkQueryUsers, async (req: Request<{}, {}
 
 routerUsers.post("/", checkBasicAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
 	let { email, login, password } = req.body;
-	let newUser = await UsersService.createUser(email, login, password);
+	let newUser = await AuthService.registration(email, login, password);
 	if (!newUser) {
 		return res.sendStatus(404);
 	}

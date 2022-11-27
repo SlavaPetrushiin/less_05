@@ -9,7 +9,7 @@ import { routerComments } from './routers/commentsRouter';
 
 const app = express();
 app.use(express.json());
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;  
 
 app.use('/auth', routerAuth);
 app.use('/users', routerUsers);

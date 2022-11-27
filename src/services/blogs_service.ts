@@ -4,12 +4,13 @@ import { BlogsRepository } from './../repositories/blogs-db-repository';
 import { ApiTypes } from "../types/types";
 
 export class BlogsService {
-	static async createBlog(name: string, youtubeUrl: string): Promise<ApiTypes.IBlog | boolean> {
+	static async createBlog(name: string, description: string, websiteUrl: string): Promise<ApiTypes.IBlog | boolean> {
 		try {
 			const newBLog: ApiTypes.IBlog = {
 				id: (new Date().getMilliseconds()).toString(),
 				name,
-				youtubeUrl,
+				websiteUrl,
+				description,
 				createdAt: new Date().toISOString()
 			}
 

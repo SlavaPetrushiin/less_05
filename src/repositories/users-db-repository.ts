@@ -15,7 +15,7 @@ class UsersRepositoryModel {
 
 	public async deleteUser(id: string): Promise<boolean> {
 		try {
-			let result = await usersCollection.deleteOne({id});
+			let result = await usersCollection.deleteOne({ id });
 			return result.deletedCount > 0 ? true : false;
 		} catch (error) {
 			return false;
@@ -32,4 +32,4 @@ class UsersRepositoryModel {
 	}
 }
 
-export const  UsersRepository = new UsersRepositoryModel();
+export const UsersRepository = new UsersRepositoryModel();

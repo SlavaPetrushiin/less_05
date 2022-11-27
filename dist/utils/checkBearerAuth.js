@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkBearerAuth = void 0;
-const query_db_repository_1 = require("./../repositories/query-db-repository");
+const clients_db_repository_1 = require("./../repositories/clients-db-repository");
 const jwt_service_1 = require("./../services/jwt_service");
 const checkBearerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.headers.authorization) {
@@ -21,7 +21,7 @@ const checkBearerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     if (!userId) {
         return res.sendStatus(401);
     }
-    let user = yield query_db_repository_1.QueryRepository.getUser({ id: userId });
+    let user = yield clients_db_repository_1.ClientsRepository.getUSerByID(userId);
     if (!user) {
         return res.sendStatus(401);
     }

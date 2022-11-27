@@ -9,7 +9,8 @@ const checkUrl = (url) => {
 };
 exports.createAndUpdateBlogValidator = [
     (0, express_validator_1.body)("name").isString().trim().isLength({ min: 1, max: 15 }).withMessage("Укажите имя"),
-    (0, express_validator_1.body)("youtubeUrl").isString().trim().isLength({ min: 1, max: 100 }).custom(checkUrl).withMessage("Укажите валидную ссылку"),
+    (0, express_validator_1.body)("websiteUrl").isString().trim().isLength({ min: 1, max: 100 }).custom(checkUrl).withMessage("Укажите валидную ссылку"),
+    (0, express_validator_1.body)("description").isString().trim().isLength({ min: 1, max: 500 }).withMessage("Укажите описание")
 ];
 exports.checkBlogValidator = [
     (0, express_validator_1.body)("title").isString().trim().isLength({ min: 1, max: 30 }).withMessage("Укажите заголовок"),

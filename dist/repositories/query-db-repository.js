@@ -92,7 +92,7 @@ class QueryRepository {
     static getUser(params) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let user = yield db_1.usersCollection.findOne(params, { projection: Object.assign({}, DEFAULT_PROJECTION) });
+                let user = yield db_1.clientsCollection.findOne(params, { projection: Object.assign({}, DEFAULT_PROJECTION) });
                 return user;
             }
             catch (error) {
@@ -106,7 +106,7 @@ class QueryRepository {
             try {
                 let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = params;
                 let skip = (+pageNumber - 1) * +pageSize;
-                let result = yield db_1.usersCollection.find({
+                let result = yield db_1.clientsCollection.find({
                     $or: [
                         { email: { $regex: searchEmailTerm, $options: "$i" } },
                         { login: { $regex: searchLoginTerm, $options: "$i" } }
@@ -116,7 +116,7 @@ class QueryRepository {
                     .limit(+pageSize)
                     .sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
                     .toArray();
-                let totalCount = yield db_1.usersCollection.countDocuments({
+                let totalCount = yield db_1.clientsCollection.countDocuments({
                     $or: [
                         { email: { $regex: searchEmailTerm, $options: "$i" } },
                         { login: { $regex: searchLoginTerm, $options: "$i" } }
@@ -128,7 +128,7 @@ class QueryRepository {
                     page: +pageNumber,
                     pageSize: +pageSize,
                     totalCount,
-                    items: result
+                    items: result.map(user => ({ id: user.id, login: user.login, email: user.email, createdAt: user.createdAt, hasPassword: user.hasPassword }))
                 };
             }
             catch (error) {

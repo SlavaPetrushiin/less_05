@@ -27,9 +27,9 @@ class BlogsRepositoryModel {
     updateBlog(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let { id, name, youtubeUrl } = blog;
+                let { id, name, description, websiteUrl } = blog;
                 let result = yield db_1.blogsCollection.updateOne({ id }, {
-                    $set: { name, youtubeUrl }
+                    $set: { name, websiteUrl, description }
                 });
                 if (result.matchedCount == 0) {
                     return false;

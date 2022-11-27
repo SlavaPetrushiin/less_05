@@ -20,6 +20,7 @@ const checkError_1 = require("./../utils/checkError");
 const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
 const checkQueryUsers_1 = require("../utils/checkQueryUsers");
+const auth_service_1 = require("../services/auth_service");
 exports.routerUsers = express_1.default.Router();
 exports.routerUsers.get("/", checkBasicAuth_1.checkBasicAuth, checkQueryUsers_1.checkQueryUsers, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { pageNumber, pageSize, searchEmailTerm, searchLoginTerm, sortBy, sortDirection } = req.query;
@@ -39,7 +40,7 @@ exports.routerUsers.get("/", checkBasicAuth_1.checkBasicAuth, checkQueryUsers_1.
 }));
 exports.routerUsers.post("/", checkBasicAuth_1.checkBasicAuth, usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email, login, password } = req.body;
-    let newUser = yield users_service_1.UsersService.createUser(email, login, password);
+    let newUser = yield auth_service_1.AuthService.registration(email, login, password);
     if (!newUser) {
         return res.sendStatus(404);
     }

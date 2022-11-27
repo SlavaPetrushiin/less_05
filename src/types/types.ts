@@ -2,8 +2,9 @@ export namespace ApiTypes {
 	export interface IBlog {
 		id: string;
 		name: string;
-		youtubeUrl: string;
+		websiteUrl: string;
 		createdAt: string;
+		description: string;
 	}
 
 	export interface IPost {
@@ -53,5 +54,18 @@ export namespace ApiTypes {
 		userLogin: string;
 		createdAt: string;
 		postId: string;
+	}
+
+	export interface IClientDB {
+		email: string;
+		login: string;
+		id: string;
+		createdAt: string;
+		hasPassword: string;
+		emailConfirmation: {
+			code: string;
+			expirationData: Date;
+			isConfirmed: boolean;
+		}
 	}
 }

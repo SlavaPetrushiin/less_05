@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
+const clients_db_repository_1 = require("./../repositories/clients-db-repository");
 const query_db_repository_1 = require("./../repositories/query-db-repository");
-const users_db_repository_1 = require("../repositories/users-db-repository");
 const bcrypt = require('bcrypt');
 function hasPassword(password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -40,7 +40,6 @@ class UsersService {
     static login(login, password) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield query_db_repository_1.QueryRepository.getUser({ login });
-            console.log(user);
             if (!user) {
                 return null;
             }
@@ -55,25 +54,34 @@ class UsersService {
         return __awaiter(this, void 0, void 0, function* () {
             const id = new Date().getMilliseconds().toString();
             const createdAt = new Date().toISOString();
-            //const candidate = await QueryRepository.getUser(login);
-            //console.log("candidate: ", candidate);
             const hasPass = yield hasPassword(password);
             if (!hasPass) {
                 return null;
             }
-            const newUser = { email, login, id, createdAt, hasPassword: hasPass };
-            const isCreatedUser = yield users_db_repository_1.UsersRepository.createUser(newUser);
+            const newUser = {
+                email,
+                login,
+                id,
+                createdAt,
+                hasPassword: hasPass,
+                emailConfirmation: {
+                    code: "",
+                    expirationData: new Date(),
+                    isConfirmed: false
+                }
+            };
+            const isCreatedUser = yield clients_db_repository_1.ClientsRepository.createClient(newUser);
             return isCreatedUser ? { email, login, id, createdAt } : null;
         });
     }
     static deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return users_db_repository_1.UsersRepository.deleteUser(id);
+            return clients_db_repository_1.ClientsRepository.deleteUser(id);
         });
     }
     static deleteUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return users_db_repository_1.UsersRepository.deleteUsers();
+            return clients_db_repository_1.ClientsRepository.deleteUsers();
         });
     }
 }

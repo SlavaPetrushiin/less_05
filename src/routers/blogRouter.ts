@@ -25,8 +25,8 @@ routerBlogs.get('/', checkQueryPostsAndBlogs, async (req: Request<{}, {}, {}, IQ
 })
 
 routerBlogs.post('/', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{}, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response<ApiTypes.IBlog | boolean>) => {
-	let { name, youtubeUrl } = req.body;
-	let newBlog = await BlogsService.createBlog(name, youtubeUrl);
+	let { name, description, websiteUrl } = req.body;
+	let newBlog = await BlogsService.createBlog(name, description, websiteUrl);
 	if (!newBlog) return res.sendStatus(400);
 	return res.status(201).send(newBlog);
 })
@@ -75,9 +75,9 @@ routerBlogs.post('/:id/posts', checkBasicAuth, checkBlogValidator, checkError, a
 })
 
 routerBlogs.put('/:id', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{ id: string }, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response) => {
-	let { name, youtubeUrl, createdAt } = req.body;
+	let { name, description, websiteUrl,  createdAt } = req.body;
 	let { id } = req.params;
-	let isUpdatedBlog = await BlogsService.updateBlog({ id, name, youtubeUrl, createdAt });
+	let isUpdatedBlog = await BlogsService.updateBlog({ id, name, description, websiteUrl, createdAt });
 	if (!isUpdatedBlog) {
 		return res.sendStatus(404);
 	}

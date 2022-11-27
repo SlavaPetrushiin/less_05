@@ -8,7 +8,8 @@ const  checkUrl: CustomValidator =(url: string) => {
 
 export const createAndUpdateBlogValidator = [
 	body("name").isString().trim().isLength({min: 1, max: 15}).withMessage("Укажите имя"),
-	body("youtubeUrl").isString().trim().isLength({min: 1, max: 100}).custom(checkUrl).withMessage("Укажите валидную ссылку"),
+	body("websiteUrl").isString().trim().isLength({min: 1, max: 100}).custom(checkUrl).withMessage("Укажите валидную ссылку"),
+	body("description").isString().trim().isLength({min: 1, max: 500}).withMessage("Укажите описание")
 ];
 
 export const checkBlogValidator = [

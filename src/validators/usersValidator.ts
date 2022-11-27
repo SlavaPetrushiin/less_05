@@ -6,7 +6,7 @@ const checkEmail = (email: string) => {
 } 
 
 export const loginValidator = [
-	body("login").isString().isLength({min: 3, max: 10}).withMessage("KJuby должен быть от 3 до 10 символов"),
+	body("loginOrEmail").isString().isLength({min: 3, max: 10}).withMessage("KJuby должен быть от 3 до 10 символов"),
 	body("password").isString().isLength({min: 6, max: 20}).withMessage("Пароль должен быть от 6 до 20 символов"),
 ]
 

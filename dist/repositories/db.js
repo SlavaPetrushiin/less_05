@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDB = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.db = void 0;
+exports.runDB = exports.clientsCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.db = void 0;
 const mongodb_1 = require("mongodb");
 const url = process.env.mongoURL || 'mongodb+srv://admin:Atg-CC6-y2A-B5H@cluster0.uk9jguo.mongodb.net/?retryWrites=true&w=majority';
 const client = new mongodb_1.MongoClient(url);
@@ -19,6 +19,7 @@ exports.blogsCollection = exports.db.collection("blogs");
 exports.postsCollection = exports.db.collection("posts");
 exports.usersCollection = exports.db.collection("users");
 exports.commentsCollection = exports.db.collection("comments");
+exports.clientsCollection = exports.db.collection("clients");
 function runDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

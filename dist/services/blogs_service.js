@@ -12,13 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BlogsService = void 0;
 const blogs_db_repository_1 = require("./../repositories/blogs-db-repository");
 class BlogsService {
-    static createBlog(name, youtubeUrl) {
+    static createBlog(name, description, websiteUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const newBLog = {
                     id: (new Date().getMilliseconds()).toString(),
                     name,
-                    youtubeUrl,
+                    websiteUrl,
+                    description,
                     createdAt: new Date().toISOString()
                 };
                 let result = yield blogs_db_repository_1.BlogsRepository.createBlog(Object.assign({}, newBLog));

@@ -2,7 +2,7 @@ import { ApiTypes } from '../types/types';
 import { ICommentsByPostID } from '../utils/checkQueryCommentsByPostID';
 import { IQueryUsers } from '../utils/checkQueryUsers';
 import { BlogsRepository } from './blogs-db-repository';
-import { blogsCollection, postsCollection, usersCollection, commentsCollection } from "./db";
+import { blogsCollection, postsCollection, usersCollection, commentsCollection, clientsCollection } from "./db";
 
 interface IReqAllBlogs {
 	searchNameTerm: string;
@@ -115,7 +115,7 @@ export class QueryRepository {
 	static async getUser(params: { login?: string, id?: string }): Promise<ApiTypes.IUserDB | null> {
 		try {
 
-			let user = await usersCollection.findOne(params, { projection: { ...DEFAULT_PROJECTION } });
+			let user = await clientsCollection.findOne(params, { projection: { ...DEFAULT_PROJECTION } });
 			return user;
 		} catch (error) {
 			console.error("getUser: ", error);
@@ -129,7 +129,7 @@ export class QueryRepository {
 
 			let skip = (+pageNumber - 1) * +pageSize;
 
-			let result = await usersCollection.find(
+			let result = await clientsCollection.find(
 				{
 					$or: [
 						{ email: { $regex: searchEmailTerm, $options: "$i" } },
@@ -143,7 +143,7 @@ export class QueryRepository {
 				.sort({ [sortBy]: sortDirection == "asc" ? 1 : -1 })
 				.toArray();
 
-			let totalCount = await usersCollection.countDocuments({
+			let totalCount = await clientsCollection.countDocuments({
 				$or: [
 					{ email: { $regex: searchEmailTerm, $options: "$i" } },
 					{ login: { $regex: searchLoginTerm, $options: "$i" } }
@@ -156,7 +156,7 @@ export class QueryRepository {
 				page: +pageNumber,
 				pageSize: +pageSize,
 				totalCount,
-				items: result
+				items: result.map(user => ({id: user.id, login: user.login, email: user.email, createdAt: user.createdAt, hasPassword: user.hasPassword}))
 			}
 		} catch (error) {
 			console.error(`error --> getUsers - ${error}`);
