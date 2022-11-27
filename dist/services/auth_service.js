@@ -89,7 +89,7 @@ class AuthService {
             // if (!isSentEmail) {
             // 	return null;
             // }
-            return { email, login, id, createdAt };
+            return client;
         });
     }
     static confirmCode(code) {

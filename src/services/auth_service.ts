@@ -53,7 +53,7 @@ export class AuthService {
 		return user;
 	}
 
-	static async registration(login: string, email: string, password: string): Promise<ApiTypes.IUserDB | null> {
+	static async registration(login: string, email: string, password: string): Promise<ApiTypes.IClientDB | null> {
 		const passwordHash = await hasPassword(password);
 		const id = new Date().getMilliseconds().toString();
 		const createdAt = new Date().toISOString();
@@ -86,7 +86,7 @@ export class AuthService {
 		// 	return null;
 		// }
 
-		return { email, login, id, createdAt } as ApiTypes.IUserDB ;
+		return client ;
 	}
 
 	static async confirmCode(code: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
