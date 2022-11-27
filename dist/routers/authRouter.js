@@ -49,7 +49,9 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
 exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password, email } = req.body;
     let result = yield auth_service_1.AuthService.registration(login, email, password);
+    console.log("REGISTER: ", result);
     if (!result) {
+        console.log("HERE!!! start");
         res.status(400).send({
             "message": "Не удалось зарегистрироваться",
             "field": "email"

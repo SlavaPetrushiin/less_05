@@ -2,9 +2,7 @@ import { checkBearerAuth } from './../utils/checkBearerAuth';
 import { checkError, checkErrorAuth } from './../utils/checkError';
 import express, { Request, Response } from 'express';
 import { loginValidator, userValidator } from '../validators/usersValidator';
-import { UsersService } from './../services/users_service';
 import { ServiceJWT } from '../services/jwt_service';
-import { Email } from '../lib/email';
 import { AuthService } from '../services/auth_service';
 export const routerAuth = express.Router();
 
@@ -56,9 +54,11 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 
 routerAuth.post('/registration', userValidator, checkError, async (req: Request<{}, {}, IRegistration>, res: Response) => {
 	let { login, password, email } = req.body;
-	let result = await AuthService.registration(login,  email, password);
-
+	let result = await AuthService.registration(login, email, password);
+	console.log("REGISTER: ", result);
 	if(!result){
+		console.log("HERE!!! start");
+
 		res.status(400).send({
 			"message": "Не удалось зарегистрироваться",
       "field": "email"
