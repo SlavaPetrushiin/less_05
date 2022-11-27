@@ -17,6 +17,10 @@ interface IRegistration {
 	email: string;
 }
 
+function getErrorMessage(){
+	return {errorsMessages: [{ message: "Не удалось зарегистрироваться", field: "email" }]}
+}
+
 routerAuth.get('/me', checkBearerAuth, async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let user = req.user;
 	res.send(user);
@@ -57,10 +61,7 @@ routerAuth.post('/registration', userValidator, checkError, async (req: Request<
 	let result = await AuthService.registration(login, email, password);
 	
 	if(!result){
-		res.status(400).send({
-			"message": "Не удалось зарегистрироваться",
-      "field": "email"
-		})
+		res.status(400).send(getErrorMessage())
 		return;
 	} 
 
@@ -72,10 +73,7 @@ routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, {code:
 	let result = await AuthService.confirmCode(code);
 
 	if(!result){
-		res.status(400).send({
-			"message": "Не удалось зарегистрироваться",
-      "field": "email"
-		})
+		res.status(400).send(getErrorMessage())
 		return;
 	} 
 
@@ -87,10 +85,7 @@ routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, {em
 	let result = await AuthService.confirmResending(email);
 
 	if(!result){
-		res.status(400).send({
-			"message": "Не удалось зарегистрироваться",
-      "field": "email"
-		})
+		res.status(400).send(getErrorMessage())
 		return;
 	} 
 
