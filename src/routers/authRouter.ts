@@ -55,10 +55,8 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 routerAuth.post('/registration', userValidator, checkError, async (req: Request<{}, {}, IRegistration>, res: Response) => {
 	let { login, password, email } = req.body;
 	let result = await AuthService.registration(login, email, password);
-	console.log("REGISTER: ", result);
+	
 	if(!result){
-		console.log("HERE!!! start");
-
 		res.status(400).send({
 			"message": "Не удалось зарегистрироваться",
       "field": "email"

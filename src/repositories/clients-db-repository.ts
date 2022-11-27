@@ -30,9 +30,13 @@ class ClientsRepositoryModel {
 		}
 	}
 
-	public async 	getClientByEmailOrLogin(emailOrLogin: string): Promise<ApiTypes.IClientDB | null>{
+	public async 	getClientByEmailOrLogin(emailOrLogin: string, email?: string): Promise<ApiTypes.IClientDB | null>{
 		try {
-			return await clientsCollection.findOne({$or: [{email: emailOrLogin}, {login: emailOrLogin}]} );
+			if(email){
+				return await clientsCollection.findOne({$or: [ {login: emailOrLogin}, {email: email}]} );
+			}
+
+			return await clientsCollection.findOne({$or: [ {login: emailOrLogin}, {email: emailOrLogin}]} );
 		} catch (error) {
 			console.error(`ClientsRepositoryModel, Not found client by emailOrLogin: ${emailOrLogin}`);
 			return null;

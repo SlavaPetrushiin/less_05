@@ -45,10 +45,13 @@ class ClientsRepositoryModel {
             }
         });
     }
-    getClientByEmailOrLogin(emailOrLogin) {
+    getClientByEmailOrLogin(emailOrLogin, email) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield db_1.clientsCollection.findOne({ $or: [{ email: emailOrLogin }, { login: emailOrLogin }] });
+                if (email) {
+                    return yield db_1.clientsCollection.findOne({ $or: [{ login: emailOrLogin }, { email: email }] });
+                }
+                return yield db_1.clientsCollection.findOne({ $or: [{ login: emailOrLogin }, { email: emailOrLogin }] });
             }
             catch (error) {
                 console.error(`ClientsRepositoryModel, Not found client by emailOrLogin: ${emailOrLogin}`);

@@ -63,6 +63,10 @@ class AuthService {
     }
     static registration(login, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
+            let isFoundedCandidate = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(login, email);
+            if (isFoundedCandidate) {
+                return null;
+            }
             const passwordHash = yield hasPassword(password);
             const id = new Date().getMilliseconds().toString();
             const createdAt = new Date().toISOString();

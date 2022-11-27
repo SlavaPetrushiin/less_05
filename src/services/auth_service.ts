@@ -55,6 +55,12 @@ export class AuthService {
 	}
 
 	static async registration(login: string, email: string, password: string): Promise<ApiTypes.IClientDB | null> {
+		let isFoundedCandidate = await ClientsRepository.getClientByEmailOrLogin(login, email);
+
+		if(isFoundedCandidate){
+			return null;
+		}
+
 		const passwordHash = await hasPassword(password);
 		const id = new Date().getMilliseconds().toString();
 		const createdAt = new Date().toISOString();
