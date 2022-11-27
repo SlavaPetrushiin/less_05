@@ -74,8 +74,12 @@ routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, {code:
 	let result = await AuthService.confirmCode(code);
 
 	if(!result){
-		res.sendStatus(401)
-	}
+		res.status(400).send({
+			"message": "Не удалось зарегистрироваться",
+      "field": "email"
+		})
+		return;
+	} 
 
 	res.sendStatus(204);
 })
@@ -85,8 +89,12 @@ routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, {em
 	let result = await AuthService.confirmResending(email);
 
 	if(!result){
-		res.sendStatus(401)
-	}
+		res.status(400).send({
+			"message": "Не удалось зарегистрироваться",
+      "field": "email"
+		})
+		return;
+	} 
 
 	res.sendStatus(204);
 })

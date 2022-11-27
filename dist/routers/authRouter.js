@@ -62,7 +62,11 @@ exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(vo
     let { code } = req.body;
     let result = yield auth_service_1.AuthService.confirmCode(code);
     if (!result) {
-        res.sendStatus(401);
+        res.status(400).send({
+            "message": "Не удалось зарегистрироваться",
+            "field": "email"
+        });
+        return;
     }
     res.sendStatus(204);
 }));
@@ -70,7 +74,11 @@ exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter
     let { email } = req.body;
     let result = yield auth_service_1.AuthService.confirmResending(email);
     if (!result) {
-        res.sendStatus(401);
+        res.status(400).send({
+            "message": "Не удалось зарегистрироваться",
+            "field": "email"
+        });
+        return;
     }
     res.sendStatus(204);
 }));
