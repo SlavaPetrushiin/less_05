@@ -117,7 +117,7 @@ export class AuthService {
 		let client = await ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
 		console.log("Client: ", client);
 		if (!client) return null;
-		//if (client.emailConfirmation.isConfirmed) return null;
+		if (client.emailConfirmation.isConfirmed) return null;
 
 		let newCode = uuidv4();
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });
