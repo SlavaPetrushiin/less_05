@@ -48,7 +48,7 @@ class ClientsRepositoryModel {
 			console.log(id, code,expirationData);
 			return await clientsCollection.findOneAndUpdate({id}, {$set: [{'emailConfirmation.code': code}, {'emailConfirmation.expirationData': expirationData}]} );
 		} catch (error) {
-			console.error(`ClientsRepositoryModel, Not updateClient`);
+			console.error(`ClientsRepositoryModel, Not updateClient: `, error);
 			return null;
 		}
 	}

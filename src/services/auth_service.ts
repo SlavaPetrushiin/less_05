@@ -98,6 +98,7 @@ export class AuthService {
 
 	static async confirmCode(code: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
 		let client = await ClientsRepository.getClientByCode(code);
+		console.log("CLIENT confirmCode: ", client);
 		if (!client) return null;
 		if (client.emailConfirmation.code != code) return null;
 		if (client.emailConfirmation.isConfirmed) return null;
@@ -114,9 +115,9 @@ export class AuthService {
 
 	static async confirmResending(emailOrLogin: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
 		let client = await ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
-		console.log(client);
+		console.log("Client: ", client);
 		if (!client) return null;
-		//if (client.emailConfirmation.isConfirmed) return null;
+		if (client.emailConfirmation.isConfirmed) return null;
 
 		let newCode = uuidv4();
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });

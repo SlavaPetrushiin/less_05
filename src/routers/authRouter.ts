@@ -67,7 +67,7 @@ routerAuth.post('/registration', userValidator, checkError, async (req: Request<
 routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, { code: string }>, res: Response) => {
 	let { code } = req.body;
 	let result = await AuthService.confirmCode(code);
-
+	console.log("registration-confirmation: ", result);
 	if (!result) {
 		res.status(400).send({
 			"errorsMessages": [

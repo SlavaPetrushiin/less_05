@@ -66,7 +66,7 @@ class ClientsRepositoryModel {
                 return yield db_1.clientsCollection.findOneAndUpdate({ id }, { $set: [{ 'emailConfirmation.code': code }, { 'emailConfirmation.expirationData': expirationData }] });
             }
             catch (error) {
-                console.error(`ClientsRepositoryModel, Not updateClient`);
+                console.error(`ClientsRepositoryModel, Not updateClient: `, error);
                 return null;
             }
         });

@@ -58,6 +58,7 @@ exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkEr
 exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { code } = req.body;
     let result = yield auth_service_1.AuthService.confirmCode(code);
+    console.log("registration-confirmation: ", result);
     if (!result) {
         res.status(400).send({
             "errorsMessages": [

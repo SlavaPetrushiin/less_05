@@ -100,6 +100,7 @@ class AuthService {
     static confirmCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
             let client = yield clients_db_repository_1.ClientsRepository.getClientByCode(code);
+            console.log("CLIENT confirmCode: ", client);
             if (!client)
                 return null;
             if (client.emailConfirmation.code != code)
@@ -118,10 +119,11 @@ class AuthService {
     static confirmResending(emailOrLogin) {
         return __awaiter(this, void 0, void 0, function* () {
             let client = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
-            console.log(client);
+            console.log("Client: ", client);
             if (!client)
                 return null;
-            //if (client.emailConfirmation.isConfirmed) return null;
+            if (client.emailConfirmation.isConfirmed)
+                return null;
             let newCode = (0, uuid_1.v4)();
             let newExpirationData = (0, date_fns_1.add)(new Date(), { hours: 1, minutes: 3 });
             let isUpdatedClient = yield clients_db_repository_1.ClientsRepository.updateClient(client.id, newCode, newExpirationData);
