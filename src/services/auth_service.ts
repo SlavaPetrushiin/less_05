@@ -114,14 +114,14 @@ export class AuthService {
 
 	static async confirmResending(emailOrLogin: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
 		let client = await ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
-
+		console.log(client);
 		if (!client) return null;
 		if (client.emailConfirmation.isConfirmed) return null;
 
 		let newCode = uuidv4();
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });
 		let isUpdatedClient = await ClientsRepository.updateClient(client.id, newCode, newExpirationData);
-
+		console.log(isUpdatedClient);
 		if (!isUpdatedClient) {
 			return null;
 		}

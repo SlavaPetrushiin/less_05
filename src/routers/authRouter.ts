@@ -85,6 +85,7 @@ routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, { code
 
 routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, { email: string }>, res: Response) => {
 	let { email } = req.body;
+	console.log(email);
 	let result = await AuthService.confirmResending(email);
 
 	if (!result) {

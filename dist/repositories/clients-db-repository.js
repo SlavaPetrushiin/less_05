@@ -62,7 +62,8 @@ class ClientsRepositoryModel {
     updateClient(id, code, expirationData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                return yield db_1.clientsCollection.findOneAndUpdate({ id }, { $set: [{ code }, { 'emailConfirmation.expirationData': expirationData }] });
+                console.log(id, code, expirationData);
+                return yield db_1.clientsCollection.findOneAndUpdate({ id }, { $set: [{ 'emailConfirmation.code': code }, { 'emailConfirmation.expirationData': expirationData }] });
             }
             catch (error) {
                 console.error(`ClientsRepositoryModel, Not updateClient`);

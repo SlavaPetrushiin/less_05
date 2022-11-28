@@ -73,6 +73,7 @@ exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(vo
 }));
 exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email } = req.body;
+    console.log(email);
     let result = yield auth_service_1.AuthService.confirmResending(email);
     if (!result) {
         res.status(400).send({
