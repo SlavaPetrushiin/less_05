@@ -20,9 +20,6 @@ const usersValidator_1 = require("../validators/usersValidator");
 const jwt_service_1 = require("../services/jwt_service");
 const auth_service_1 = require("../services/auth_service");
 exports.routerAuth = express_1.default.Router();
-function getErrorMessage() {
-    return { errorsMessages: [{ message: "Не удалось зарегистрироваться", field: "email" }] };
-}
 exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     res.send(user);
@@ -53,7 +50,7 @@ exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkEr
     let { login, password, email } = req.body;
     let result = yield auth_service_1.AuthService.registration(login, email, password);
     if (!result) {
-        res.status(400).send(getErrorMessage());
+        res.sendStatus(400);
         return;
     }
     res.sendStatus(204);
@@ -62,7 +59,7 @@ exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(vo
     let { code } = req.body;
     let result = yield auth_service_1.AuthService.confirmCode(code);
     if (!result) {
-        res.status(400).send(getErrorMessage());
+        res.sendStatus(400);
         return;
     }
     res.sendStatus(204);
@@ -71,7 +68,7 @@ exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter
     let { email } = req.body;
     let result = yield auth_service_1.AuthService.confirmResending(email);
     if (!result) {
-        res.status(400).send(getErrorMessage());
+        res.sendStatus(400);
         return;
     }
     res.sendStatus(204);
