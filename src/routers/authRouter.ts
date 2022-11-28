@@ -32,12 +32,12 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		return
 	}
 
-	if(!user.emailConfirmation.isConfirmed) {
+	if (!user.emailConfirmation.isConfirmed) {
 		res.sendStatus(401);
 		return
 	}
 
-	if(!user.emailConfirmation.isConfirmed) {
+	if (!user.emailConfirmation.isConfirmed) {
 		res.sendStatus(401);
 		return
 	}
@@ -55,35 +55,49 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 routerAuth.post('/registration', userValidator, checkError, async (req: Request<{}, {}, IRegistration>, res: Response) => {
 	let { login, password, email } = req.body;
 	let result = await AuthService.registration(login, email, password);
-	
-	if(!result){
+
+	if (!result) {
 		res.sendStatus(400);
 		return;
-	} 
-
-	res.sendStatus(204); 
-})
-
-routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, {code: string}>, res: Response) => {
-	let { code } = req.body;
-	let result = await AuthService.confirmCode(code);
-
-	if(!result){
-		res.sendStatus(400);
-		return;
-	} 
+	}
 
 	res.sendStatus(204);
 })
 
-routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, {email: string}>, res: Response) => {
+routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, { code: string }>, res: Response) => {
+	let { code } = req.body;
+	let result = await AuthService.confirmCode(code);
+
+	if (!result) {
+		res.status(400).send({
+			"errorsMessages": [
+				{
+					"message": "Не валидный код",
+					"field": "code"
+				}
+			]
+		});
+		return;
+	}
+
+	res.sendStatus(204);
+})
+
+routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, { email: string }>, res: Response) => {
 	let { email } = req.body;
 	let result = await AuthService.confirmResending(email);
 
-	if(!result){
-		res.sendStatus(400);
+	if (!result) {
+		res.status(400).send({
+			"errorsMessages": [
+				{
+					"message": "Нет такого email",
+					"field": "email"
+				}
+			]
+		});
 		return;
-	} 
+	}
 
 	res.sendStatus(204);
 })
