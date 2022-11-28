@@ -46,7 +46,7 @@ class ClientsRepositoryModel {
 	public async 	updateClient(id: string, code: string, expirationData: Date): Promise<ModifyResult<ApiTypes.IClientDB> | null>{
 		try {
 			console.log(id, code,expirationData);
-			return await clientsCollection.findOneAndUpdate({id}, {$set: [{'emailConfirmation.code': code}, {'emailConfirmation.expirationData': expirationData}]} );
+			return await clientsCollection.findOneAndUpdate({id}, {$set: {'emailConfirmation.code': code, 'emailConfirmation.expirationData': expirationData}} );
 		} catch (error) {
 			console.error(`ClientsRepositoryModel, Not updateClient: `, error);
 			return null;
