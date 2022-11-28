@@ -121,8 +121,7 @@ class AuthService {
             console.log(client);
             if (!client)
                 return null;
-            if (client.emailConfirmation.isConfirmed)
-                return null;
+            //if (client.emailConfirmation.isConfirmed) return null;
             let newCode = (0, uuid_1.v4)();
             let newExpirationData = (0, date_fns_1.add)(new Date(), { hours: 1, minutes: 3 });
             let isUpdatedClient = yield clients_db_repository_1.ClientsRepository.updateClient(client.id, newCode, newExpirationData);
