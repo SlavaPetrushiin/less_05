@@ -33,10 +33,10 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		return
 	}
 
-	if (!user.emailConfirmation.isConfirmed) {
-		res.sendStatus(401);
-		return
-	}
+	// if (!user.emailConfirmation.isConfirmed) {
+	// 	res.sendStatus(401);
+	// 	return
+	// }
 
 	const accessToken = await ServiceJWT.addJWT(user);
 
