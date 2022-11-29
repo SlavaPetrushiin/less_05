@@ -132,10 +132,10 @@ class AuthService {
                 return null;
             }
             let url = getUrlWithCode(client.emailConfirmation.code);
-            const isResendingCode = yield email_1.Email.sendEmail(client.email, url);
-            if (!isResendingCode) {
-                return null;
-            }
+            yield email_1.Email.sendEmail(client.email, url);
+            // if (!isResendingCode) {
+            // 	return null;
+            // }
             return isUpdatedClient;
         });
     }

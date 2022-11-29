@@ -128,11 +128,11 @@ export class AuthService {
 		}
 
 		let url = getUrlWithCode(client.emailConfirmation.code);
-		const isResendingCode = await Email.sendEmail(client.email, url);
+		await Email.sendEmail(client.email, url);
 
-		if (!isResendingCode) {
-			return null;
-		}
+		// if (!isResendingCode) {
+		// 	return null;
+		// }
 
 		return isUpdatedClient;
 	}
