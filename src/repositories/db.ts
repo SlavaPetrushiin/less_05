@@ -18,6 +18,7 @@ export const postsCollection = db.collection<ApiTypes.IPost>("posts");
 export const usersCollection = db.collection<ApiTypes.IUserDB>("users");
 export const commentsCollection = db.collection<ApiTypes.ICommentModel>("comments");
 export const clientsCollection = db.collection<ApiTypes.IClientDB>("clients");
+export const logCollection = db.collection('logs')
 
 export async function runDB(){
 	try {

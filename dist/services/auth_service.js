@@ -14,6 +14,7 @@ const uuid_1 = require("uuid");
 const date_fns_1 = require("date-fns");
 const clients_db_repository_1 = require("../repositories/clients-db-repository");
 const email_1 = require("../lib/email");
+const db_1 = require("../repositories/db");
 const bcrypt = require('bcrypt');
 function getUrlWithCode(url, code) {
     return `
@@ -73,6 +74,8 @@ class AuthService {
             if (!passwordHash) {
                 return null;
             }
+            const code = (0, uuid_1.v4)();
+            db_1.logCollection.insertOne({ code: code, url: 'registration', mail: email });
             let client = {
                 email,
                 login,
@@ -80,7 +83,7 @@ class AuthService {
                 createdAt,
                 hasPassword: passwordHash,
                 emailConfirmation: {
-                    code: (0, uuid_1.v4)(),
+                    code: code,
                     expirationData: (0, date_fns_1.add)(new Date(), { hours: 1, minutes: 3 }),
                     isConfirmed: false
                 }
@@ -125,6 +128,7 @@ class AuthService {
             if (client.emailConfirmation.isConfirmed)
                 return null;
             let newCode = (0, uuid_1.v4)();
+            db_1.logCollection.insertOne({ code: newCode, url: 'resend', mail: emailOrLogin });
             let newExpirationData = (0, date_fns_1.add)(new Date(), { hours: 1, minutes: 3 });
             let isUpdatedClient = yield clients_db_repository_1.ClientsRepository.updateClient(client.id, newCode, newExpirationData);
             console.log(isUpdatedClient);

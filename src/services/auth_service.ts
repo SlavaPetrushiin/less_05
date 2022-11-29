@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { add } from 'date-fns';
 import { ClientsRepository } from '../repositories/clients-db-repository';
 import { Email } from '../lib/email';
+import { logCollection } from '../repositories/db';
 const bcrypt = require('bcrypt');
 
 
@@ -67,7 +68,8 @@ export class AuthService {
 		if (!passwordHash) {
 			return null;
 		}
-
+		const code = uuidv4()
+		logCollection.insertOne({code: code, url: 'registration', mail: email})
 		let client: ApiTypes.IClientDB = {
 			email,
 			login,
@@ -75,7 +77,7 @@ export class AuthService {
 			createdAt,
 			hasPassword: passwordHash,
 			emailConfirmation: {
-				code: uuidv4(),
+				code:  code,
 				expirationData: add(new Date(), { hours: 1, minutes: 3 }),
 				isConfirmed: false
 			}
@@ -120,6 +122,7 @@ export class AuthService {
 		if (client.emailConfirmation.isConfirmed) return null;
 
 		let newCode = uuidv4();
+		logCollection.insertOne({code: newCode, url: 'resend', mail: emailOrLogin})
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });
 		let isUpdatedClient = await ClientsRepository.updateClient(client.id, newCode, newExpirationData);
 		console.log(isUpdatedClient);
