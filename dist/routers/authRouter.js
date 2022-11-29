@@ -27,6 +27,7 @@ exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => _
 exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { loginOrEmail, password } = req.body;
     let user = yield auth_service_1.AuthService.login(loginOrEmail, password);
+    console.log("user: ", user);
     if (!user) {
         res.sendStatus(401);
         return;
@@ -40,6 +41,7 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         return;
     }
     const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user);
+    console.log("accessToken: ", accessToken);
     if (!accessToken) {
         res.sendStatus(401);
         return;
