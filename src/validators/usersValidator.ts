@@ -9,7 +9,7 @@ const checkEmail = (email: string) => {
 const checkEmailOrLogin = async (emailOrLogin: string) => {
 	let client = await ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
 	if (client) {
-		console.log("ERROR");
+		console.log("ERROR-checkEmailOrLogin: ", emailOrLogin);
 		return Promise.reject();
 	}
 }

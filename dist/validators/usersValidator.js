@@ -19,7 +19,7 @@ const checkEmail = (email) => {
 const checkEmailOrLogin = (emailOrLogin) => __awaiter(void 0, void 0, void 0, function* () {
     let client = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
     if (client) {
-        console.log("ERROR");
+        console.log("ERROR-checkEmailOrLogin: ", emailOrLogin);
         return Promise.reject();
     }
 });
