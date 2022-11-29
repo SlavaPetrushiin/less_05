@@ -36,10 +36,6 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         res.sendStatus(401);
         return;
     }
-    if (!user.emailConfirmation.isConfirmed) {
-        res.sendStatus(401);
-        return;
-    }
     const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user);
     console.log("accessToken: ", accessToken);
     if (!accessToken) {
