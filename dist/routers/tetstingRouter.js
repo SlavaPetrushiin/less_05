@@ -14,15 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.routerTesting = void 0;
 const comments_service_1 = require("./../services/comments_service");
-const users_service_1 = require("./../services/users_service");
 const posts_service_1 = require("./../services/posts_service");
 const blogs_service_1 = require("./../services/blogs_service");
 const express_1 = __importDefault(require("express"));
+const clients_db_repository_1 = require("../repositories/clients-db-repository");
 exports.routerTesting = express_1.default.Router();
 exports.routerTesting.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield blogs_service_1.BlogsService.deleteAllBlogs();
     yield posts_service_1.PostService.deleteAllBPosts();
-    yield users_service_1.UsersService.deleteUsers();
+    yield clients_db_repository_1.ClientsRepository.deleteUsers();
     yield comments_service_1.CommentsService.deleteAllComments();
     res.sendStatus(204);
 }));
