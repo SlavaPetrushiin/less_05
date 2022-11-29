@@ -1,10 +1,12 @@
 import { MongoClient } from "mongodb";
 import { ApiTypes } from "../types/types";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-const url = process.env.mongoURL;
+const url = process.env.MONGODB_URI;
 
 if(!url){
-	throw new Error("Not connect DB")
+	throw new Error('Not connect DB')
 }
 
 const client = new MongoClient(url);
