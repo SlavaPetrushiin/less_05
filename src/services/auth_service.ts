@@ -89,6 +89,7 @@ export class AuthService {
 			return null;
 		}
 		let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
+		console.log('url-registr', url)
 		const isSentEmail = await Email.sendEmail(client.email, url);
 
 		// if (!isSentEmail) {
@@ -100,7 +101,6 @@ export class AuthService {
 
 	static async confirmCode(code: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
 		let client = await ClientsRepository.getClientByCode(code);
-		console.log("CLIENT confirmCode: ", client);
 		if (!client) return null;
 		if (client.emailConfirmation.code != code) return null;
 		if (client.emailConfirmation.isConfirmed) return null;
@@ -117,7 +117,6 @@ export class AuthService {
 
 	static async confirmResending(emailOrLogin: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
 		let client = await ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
-		console.log("Client: ", client);
 		if (!client) return null;
 		if (client.emailConfirmation.isConfirmed) return null;
 
@@ -125,12 +124,13 @@ export class AuthService {
 		logCollection.insertOne({code: newCode, url: 'resend', mail: emailOrLogin})
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });
 		let isUpdatedClient = await ClientsRepository.updateClient(client.id, newCode, newExpirationData);
-		console.log(isUpdatedClient);
+		console.log("confirmResending: ", isUpdatedClient, );
 		if (!isUpdatedClient) {
 			return null;
 		}
 
 		let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
+		console.log('url-resend', url)
 		await Email.sendEmail(client.email, url);
 
 		// if (!isResendingCode) {

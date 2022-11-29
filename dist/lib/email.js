@@ -42,11 +42,8 @@ dotenv.config();
 class EmailSend {
     sendEmail(email, url) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("EMAIL!:", email);
             let pass = process.env.NODEMAILER_PASS;
             let emailPas = process.env.NODEMAILER_EMAIL;
-            console.log("pass: ", pass);
-            console.log("emailPas: ", emailPas);
             let transporter = nodemailer_1.default.createTransport({
                 service: 'gmail',
                 auth: {

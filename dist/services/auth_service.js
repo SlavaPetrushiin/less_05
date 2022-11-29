@@ -93,6 +93,7 @@ class AuthService {
                 return null;
             }
             let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
+            console.log('url-registr', url);
             const isSentEmail = yield email_1.Email.sendEmail(client.email, url);
             // if (!isSentEmail) {
             // 	return null;
@@ -103,7 +104,6 @@ class AuthService {
     static confirmCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
             let client = yield clients_db_repository_1.ClientsRepository.getClientByCode(code);
-            console.log("CLIENT confirmCode: ", client);
             if (!client)
                 return null;
             if (client.emailConfirmation.code != code)
@@ -122,7 +122,6 @@ class AuthService {
     static confirmResending(emailOrLogin) {
         return __awaiter(this, void 0, void 0, function* () {
             let client = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(emailOrLogin);
-            console.log("Client: ", client);
             if (!client)
                 return null;
             if (client.emailConfirmation.isConfirmed)
@@ -131,11 +130,12 @@ class AuthService {
             db_1.logCollection.insertOne({ code: newCode, url: 'resend', mail: emailOrLogin });
             let newExpirationData = (0, date_fns_1.add)(new Date(), { hours: 1, minutes: 3 });
             let isUpdatedClient = yield clients_db_repository_1.ClientsRepository.updateClient(client.id, newCode, newExpirationData);
-            console.log(isUpdatedClient);
+            console.log("confirmResending: ", isUpdatedClient);
             if (!isUpdatedClient) {
                 return null;
             }
             let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
+            console.log('url-resend', url);
             yield email_1.Email.sendEmail(client.email, url);
             // if (!isResendingCode) {
             // 	return null;

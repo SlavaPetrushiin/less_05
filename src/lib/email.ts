@@ -5,14 +5,10 @@ dotenv.config();
 class EmailSend {
 	public async sendEmail(email: string, url: string) {
 
-		console.log("EMAIL!:", email);
 
 
 		let pass = process.env.NODEMAILER_PASS;
 		let emailPas = process.env.NODEMAILER_EMAIL;
-
-		console.log("pass: ", pass);
-		console.log("emailPas: ", emailPas);
 
 		let transporter = nodemailer.createTransport({
 			
