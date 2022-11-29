@@ -15,11 +15,11 @@ const date_fns_1 = require("date-fns");
 const clients_db_repository_1 = require("../repositories/clients-db-repository");
 const email_1 = require("../lib/email");
 const bcrypt = require('bcrypt');
-function getUrlWithCode(code) {
+function getUrlWithCode(url, code) {
     return `
 			<h1>Thank for your registration</h1>
 			<p>To finish registration please follow the link below:
-				<a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
+				<a href='https://somesite.com/${url}=${code}'>complete registration</a>
 		</p>
 	`;
 }
@@ -89,7 +89,7 @@ class AuthService {
             if (!isCreatedClient) {
                 return null;
             }
-            let url = getUrlWithCode(client.emailConfirmation.code);
+            let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
             const isSentEmail = yield email_1.Email.sendEmail(client.email, url);
             // if (!isSentEmail) {
             // 	return null;
@@ -131,7 +131,7 @@ class AuthService {
             if (!isUpdatedClient) {
                 return null;
             }
-            let url = getUrlWithCode(client.emailConfirmation.code);
+            let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
             yield email_1.Email.sendEmail(client.email, url);
             // if (!isResendingCode) {
             // 	return null;

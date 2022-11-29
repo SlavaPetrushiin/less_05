@@ -8,11 +8,11 @@ import { Email } from '../lib/email';
 const bcrypt = require('bcrypt');
 
 
-function getUrlWithCode(code: string): string {
+function getUrlWithCode(url: string, code: string): string {
 	return `
 			<h1>Thank for your registration</h1>
 			<p>To finish registration please follow the link below:
-				<a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
+				<a href='https://somesite.com/${url}=${code}'>complete registration</a>
 		</p>
 	`
 }
@@ -86,7 +86,7 @@ export class AuthService {
 		if (!isCreatedClient) {
 			return null;
 		}
-		let url = getUrlWithCode(client.emailConfirmation.code);
+		let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
 		const isSentEmail = await Email.sendEmail(client.email, url);
 
 		// if (!isSentEmail) {
@@ -127,7 +127,7 @@ export class AuthService {
 			return null;
 		}
 
-		let url = getUrlWithCode(client.emailConfirmation.code);
+		let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
 		await Email.sendEmail(client.email, url);
 
 		// if (!isResendingCode) {
