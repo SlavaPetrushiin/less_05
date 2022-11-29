@@ -92,7 +92,7 @@ class AuthService {
             if (!isCreatedClient) {
                 return null;
             }
-            let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
+            let url = getUrlWithCode('confirm-email?code', code);
             console.log('url-registr', url);
             const isSentEmail = yield email_1.Email.sendEmail(client.email, url);
             // if (!isSentEmail) {
@@ -134,7 +134,7 @@ class AuthService {
             if (!isUpdatedClient) {
                 return null;
             }
-            let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
+            let url = getUrlWithCode('confirm-registration?code', newCode);
             console.log('url-resend', url);
             yield email_1.Email.sendEmail(client.email, url);
             // if (!isResendingCode) {

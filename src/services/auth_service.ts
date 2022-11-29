@@ -88,7 +88,7 @@ export class AuthService {
 		if (!isCreatedClient) {
 			return null;
 		}
-		let url = getUrlWithCode('confirm-email?code', client.emailConfirmation.code);
+		let url = getUrlWithCode('confirm-email?code', code);
 		console.log('url-registr', url)
 		const isSentEmail = await Email.sendEmail(client.email, url);
 
@@ -129,7 +129,7 @@ export class AuthService {
 			return null;
 		}
 
-		let url = getUrlWithCode('confirm-registration?code', client.emailConfirmation.code);
+		let url = getUrlWithCode('confirm-registration?code', newCode);
 		console.log('url-resend', url)
 		await Email.sendEmail(client.email, url);
 
