@@ -6,8 +6,10 @@ import { routerBlogs } from './routers/blogRouter';
 import { routerPosts } from './routers/postsRouter';
 import { routerTesting } from './routers/tetstingRouter';
 import { routerComments } from './routers/commentsRouter';
+import  cors from 'cors';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 const port = process.env.PORT || 3000;  
 
