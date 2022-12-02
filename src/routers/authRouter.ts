@@ -26,8 +26,6 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 	let { loginOrEmail, password } = req.body;
 	let user = await AuthService.login(loginOrEmail, password);
 
-	console.log("user: ", user);
-
 	if (!user) {
 		res.sendStatus(401);
 		return
@@ -39,8 +37,6 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 	// }
 
 	const accessToken = await ServiceJWT.addJWT(user);
-
-	console.log("accessToken: ", accessToken);
 
 	if (!accessToken) {
 		res.sendStatus(401);
@@ -83,7 +79,6 @@ routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, { code
 
 routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, { email: string }>, res: Response) => {
 	let { email } = req.body;
-	console.log(email);
 	let result = await AuthService.confirmResending(email);
 
 	if (!result) {
