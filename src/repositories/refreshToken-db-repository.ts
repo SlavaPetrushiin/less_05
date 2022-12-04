@@ -1,7 +1,5 @@
 import { ApiTypes } from './../types/types';
-import { refreshTokensCollection, usersCollection } from "./db";
-
-
+import { refreshTokensCollection } from "./db";
 
 class RefreshTokenModel {
 	public async addRefreshToken(refreshToken: ApiTypes.IRefreshToken):Promise<boolean>{
@@ -17,7 +15,6 @@ class RefreshTokenModel {
 	public async updateRefreshToken(refreshToken: ApiTypes.IRefreshToken): Promise<boolean>{
 		try {
 			let {user, token, createdByIp} = refreshToken;
-			console.log(user, token, createdByIp);
 			let result = await refreshTokensCollection.updateOne({ user }, { $set: { token,  createdByIp}});
 			if (result.matchedCount == 0) {
 				return false;
@@ -39,7 +36,6 @@ class RefreshTokenModel {
 
 	public async removeRefreshTokenByUserID(userID: string): Promise<boolean>{
 		try {
-			console.log("removeRefreshTokenByUserID: ", userID);
 			let result = await refreshTokensCollection.deleteMany({user: userID});
 			return result.deletedCount > 0 ? true : false;
 		} catch (error) {

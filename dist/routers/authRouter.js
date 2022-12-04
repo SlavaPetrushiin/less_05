@@ -22,6 +22,7 @@ const auth_service_1 = require("../services/auth_service");
 const verifyRefreshToken_1 = require("../utils/verifyRefreshToken");
 exports.routerAuth = express_1.default.Router();
 const MILLISECONDS_IN_HOUR = 3600000;
+const MAX_AGE_COOKIE_MILLISECONDS = 20000;
 exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     res.send(user);
@@ -44,7 +45,7 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         res.sendStatus(401);
         return;
     }
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
     res.send({ accessToken });
 }));
 exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -99,7 +100,7 @@ exports.routerAuth.post('/refresh-token', verifyRefreshToken_1.verifyRefreshToke
     if (!updatedTokens) {
         return res.sendStatus(401);
     }
-    res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+    res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
     res.send({ accessToken: updatedTokens.accessToken });
 }));
 exports.routerAuth.post('/logout', verifyRefreshToken_1.verifyRefreshToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -108,7 +109,6 @@ exports.routerAuth.post('/logout', verifyRefreshToken_1.verifyRefreshToken, (req
         return res.sendStatus(401);
     }
     let isLogout = yield jwt_service_1.ServiceJWT.removeRefreshToken(user.userId);
-    console.log("isLogout: ", isLogout);
     if (!isLogout) {
         return res.sendStatus(401);
     }

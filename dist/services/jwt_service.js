@@ -41,11 +41,13 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const JWT_SECRET = process.env.ACCESS_JWT_SECRET || 'sdfwpsvd';
+const EXPIRES_ACCESS_TIME = '10s';
+const EXPIRES_REFRESH_TIME = '20s';
 class ServiceJWT {
     static addJWT(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let token = jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
+                let token = jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_ACCESS_TIME });
                 return token;
             }
             catch (error) {
@@ -73,15 +75,14 @@ class ServiceJWT {
     static updateRefreshToken(userId, ipAddress) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const accessToken = jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
-                const token = jsonwebtoken_1.default.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: '3h' });
+                const accessToken = jsonwebtoken_1.default.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_ACCESS_TIME });
+                const token = jsonwebtoken_1.default.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: EXPIRES_REFRESH_TIME });
                 const refreshToken = {
                     user: userId,
                     token: token,
                     createdByIp: ipAddress
                 };
                 let result = yield refreshToken_db_repository_1.RefreshTokensRepository.updateRefreshToken(refreshToken);
-                console.log("RESULT: ", result);
                 if (!result) {
                     return null;
                 }

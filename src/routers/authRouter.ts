@@ -22,6 +22,7 @@ interface IRegistration {
 
 
 const MILLISECONDS_IN_HOUR = 3600000;
+const MAX_AGE_COOKIE_MILLISECONDS = 20_000;
 
 routerAuth.get('/me', checkBearerAuth, async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let user = req.user;
@@ -53,7 +54,7 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		return;
 	}
 
-	res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+	res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
 	res.send({ accessToken });
 })
 
@@ -122,7 +123,7 @@ routerAuth.post('/refresh-token', verifyRefreshToken, async (req: Request<{}, {}
 		return res.sendStatus(401);
 	}
 
-	res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+	res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
 	res.send({ accessToken: updatedTokens.accessToken });
 })
 
@@ -135,7 +136,6 @@ routerAuth.post('/logout', verifyRefreshToken, async (req: Request, res: Respons
 
 	let isLogout = await ServiceJWT.removeRefreshToken(user.userId);
 
-	console.log("isLogout: ", isLogout);
 	if (!isLogout) {
 		return res.sendStatus(401);
 	}

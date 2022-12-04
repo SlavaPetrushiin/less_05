@@ -28,7 +28,6 @@ class RefreshTokenModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user, token, createdByIp } = refreshToken;
-                console.log(user, token, createdByIp);
                 let result = yield db_1.refreshTokensCollection.updateOne({ user }, { $set: { token, createdByIp } });
                 if (result.matchedCount == 0) {
                     return false;
@@ -54,7 +53,6 @@ class RefreshTokenModel {
     removeRefreshTokenByUserID(userID) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("removeRefreshTokenByUserID: ", userID);
                 let result = yield db_1.refreshTokensCollection.deleteMany({ user: userID });
                 return result.deletedCount > 0 ? true : false;
             }

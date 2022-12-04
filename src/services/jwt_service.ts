@@ -1,11 +1,11 @@
 import { RefreshTokensRepository } from './../repositories/refreshToken-db-repository';
 import jwt from "jsonwebtoken";
-import { ApiTypes } from "../types/types";
 import * as dotenv from 'dotenv';
-import { add } from "date-fns";
 dotenv.config();
 
 const JWT_SECRET = process.env.ACCESS_JWT_SECRET || 'sdfwpsvd';
+const EXPIRES_ACCESS_TIME = '10s';
+const EXPIRES_REFRESH_TIME = '20s';
 
 export interface TokenInterface {
 	userId: string;
@@ -14,7 +14,7 @@ export interface TokenInterface {
 export class ServiceJWT {
 	static async addJWT(userId: string): Promise<string | null> {
 		try {
-			let token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
+			let token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_ACCESS_TIME });
 			return token;
 		} catch (error) {
 			return null;
@@ -38,8 +38,8 @@ export class ServiceJWT {
 
 	static async updateRefreshToken(userId: string, ipAddress: string): Promise<{accessToken: string, refreshToken: string} | null> {
 		try {
-			const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
-			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: '3h' })
+			const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_ACCESS_TIME });
+			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME })
 			const refreshToken = {
 				user: userId,
 				token: token,
@@ -47,7 +47,6 @@ export class ServiceJWT {
 			}
 
 			let result = await RefreshTokensRepository.updateRefreshToken(refreshToken);
-console.log("RESULT: ", result);
 			if (!result) {
 				return null;
 			}
