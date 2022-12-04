@@ -32,25 +32,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkBearerAuth = void 0;
+exports.verifyRefreshToken = void 0;
 const clients_db_repository_1 = require("./../repositories/clients-db-repository");
 const jwt_service_1 = require("./../services/jwt_service");
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const checkBearerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.headers.authorization) {
+const verifyRefreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
         return res.sendStatus(401);
     }
-    let token = req.headers.authorization.split(" ")[1] || "";
-    const userId = yield jwt_service_1.ServiceJWT.getUserIdByToken(token, process.env.ACCESS_JWT_SECRET);
+    ;
+    console.log("refreshToken: ", refreshToken);
+    const userId = yield jwt_service_1.ServiceJWT.getUserIdByToken(refreshToken, process.env.REFRESH_JWT_SECRET);
     if (!userId) {
         return res.sendStatus(401);
     }
+    ;
     let user = yield clients_db_repository_1.ClientsRepository.getUSerByID(userId);
     if (!user) {
         return res.sendStatus(401);
     }
-    req.user = { email: user === null || user === void 0 ? void 0 : user.email, login: user === null || user === void 0 ? void 0 : user.login, userId: user === null || user === void 0 ? void 0 : user.id };
+    req.user = {
+        email: user === null || user === void 0 ? void 0 : user.email,
+        login: user === null || user === void 0 ? void 0 : user.login,
+        userId: user === null || user === void 0 ? void 0 : user.id
+    };
     next();
 });
-exports.checkBearerAuth = checkBearerAuth;
+exports.verifyRefreshToken = verifyRefreshToken;

@@ -51,12 +51,10 @@ class AuthService {
     static login(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             let user = yield clients_db_repository_1.ClientsRepository.getClientByEmailOrLogin(loginOrEmail);
-            console.log("USER: ", user);
             if (!user) {
                 return null;
             }
             let isValidPass = yield comparePassword(password, user.hasPassword);
-            console.log("isValidPass: ", isValidPass);
             if (!isValidPass) {
                 return null;
             }
@@ -94,7 +92,6 @@ class AuthService {
                 return null;
             }
             let url = getUrlWithCode('confirm-email?code', code);
-            console.log('url-registr', url);
             const isSentEmail = yield email_1.Email.sendEmail(client.email, url);
             // if (!isSentEmail) {
             // 	return null;

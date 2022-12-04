@@ -41,14 +41,11 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 export class AuthService {
 	static async login(loginOrEmail: string, password: string): Promise<ApiTypes.IClientDB | null> {
 		let user = await ClientsRepository.getClientByEmailOrLogin(loginOrEmail);
-		console.log("USER: ", user);
 		if (!user) {
 			return null;
 		}
 
 		let isValidPass = await comparePassword(password, user.hasPassword);
-
-		console.log("isValidPass: ", isValidPass);
 
 		if (!isValidPass) {
 			return null;
@@ -91,7 +88,6 @@ export class AuthService {
 			return null;
 		}
 		let url = getUrlWithCode('confirm-email?code', code);
-		console.log('url-registr', url)
 		const isSentEmail = await Email.sendEmail(client.email, url);
 
 		// if (!isSentEmail) {

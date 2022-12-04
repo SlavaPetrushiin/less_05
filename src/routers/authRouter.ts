@@ -4,6 +4,9 @@ import express, { Request, Response } from 'express';
 import { loginValidator, userValidator } from '../validators/usersValidator';
 import { ServiceJWT } from '../services/jwt_service';
 import { AuthService } from '../services/auth_service';
+import { add } from 'date-fns';
+import { verifyRefreshToken } from '../utils/verifyRefreshToken';
+import { cookie } from 'express-validator';
 export const routerAuth = express.Router();
 
 interface ILogin {
@@ -17,6 +20,9 @@ interface IRegistration {
 	email: string;
 }
 
+
+const MILLISECONDS_IN_HOUR = 3600000;
+
 routerAuth.get('/me', checkBearerAuth, async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let user = req.user;
 	res.send(user);
@@ -24,7 +30,10 @@ routerAuth.get('/me', checkBearerAuth, async (req: Request<{}, {}, ILogin>, res:
 
 routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let { loginOrEmail, password } = req.body;
+
+	const ipAddress = req.ip;
 	let user = await AuthService.login(loginOrEmail, password);
+
 
 	if (!user) {
 		res.sendStatus(401);
@@ -36,13 +45,15 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 	// 	return
 	// }
 
-	const accessToken = await ServiceJWT.addJWT(user);
+	const accessToken = await ServiceJWT.addJWT(user.id);
+	const refreshToken = await ServiceJWT.addRefreshToken(user.id, ipAddress);
 
-	if (!accessToken) {
+	if (!accessToken || !refreshToken) {
 		res.sendStatus(401);
-		return
+		return;
 	}
 
+	res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
 	res.send({ accessToken });
 })
 
@@ -61,7 +72,6 @@ routerAuth.post('/registration', userValidator, checkError, async (req: Request<
 routerAuth.post('/registration-confirmation', async (req: Request<{}, {}, { code: string }>, res: Response) => {
 	let { code } = req.body;
 	let result = await AuthService.confirmCode(code);
-	console.log("registration-confirmation: ", result);
 	if (!result) {
 		res.status(400).send({
 			"errorsMessages": [
@@ -93,5 +103,43 @@ routerAuth.post('/registration-email-resending', async (req: Request<{}, {}, { e
 		return;
 	}
 
+	res.sendStatus(204);
+})
+
+routerAuth.post('/refresh-token', verifyRefreshToken, async (req: Request<{}, {}, { accessToken: string }>, res: Response) => {
+	let user = req.user;
+	const ipAddress = req.ip;
+
+	if (!user) {
+		return res.sendStatus(401);
+	}
+
+	let updatedTokens = await ServiceJWT.updateRefreshToken(user.userId, ipAddress);
+
+	console.log("updatedTokens: ", updatedTokens);
+
+	if (!updatedTokens) {
+		return res.sendStatus(401);
+	}
+
+	res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+	res.send({ accessToken: updatedTokens.accessToken });
+})
+
+routerAuth.post('/logout', verifyRefreshToken, async (req: Request, res: Response) => {
+	let user = req.user;
+
+	if (!user) {
+		return res.sendStatus(401);
+	}
+
+	let isLogout = await ServiceJWT.removeRefreshToken(user.userId);
+
+	console.log("isLogout: ", isLogout);
+	if (!isLogout) {
+		return res.sendStatus(401);
+	}
+
+	delete req.cookies.refreshToken;
 	res.sendStatus(204);
 })

@@ -68,4 +68,11 @@ export namespace ApiTypes {
 			isConfirmed: boolean;
 		}
 	}
+
+	export interface IRefreshToken{
+		user: string;
+		token: string;
+		//expiresIn: number;
+		createdByIp: string;
+	}
 }

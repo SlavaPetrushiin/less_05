@@ -19,15 +19,17 @@ const express_1 = __importDefault(require("express"));
 const usersValidator_1 = require("../validators/usersValidator");
 const jwt_service_1 = require("../services/jwt_service");
 const auth_service_1 = require("../services/auth_service");
+const verifyRefreshToken_1 = require("../utils/verifyRefreshToken");
 exports.routerAuth = express_1.default.Router();
+const MILLISECONDS_IN_HOUR = 3600000;
 exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     res.send(user);
 }));
 exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.checkErrorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { loginOrEmail, password } = req.body;
+    const ipAddress = req.ip;
     let user = yield auth_service_1.AuthService.login(loginOrEmail, password);
-    console.log("user: ", user);
     if (!user) {
         res.sendStatus(401);
         return;
@@ -36,12 +38,13 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
     // 	res.sendStatus(401);
     // 	return
     // }
-    const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user);
-    console.log("accessToken: ", accessToken);
-    if (!accessToken) {
+    const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user.id);
+    const refreshToken = yield jwt_service_1.ServiceJWT.addRefreshToken(user.id, ipAddress);
+    if (!accessToken || !refreshToken) {
         res.sendStatus(401);
         return;
     }
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
     res.send({ accessToken });
 }));
 exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -56,7 +59,6 @@ exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkEr
 exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { code } = req.body;
     let result = yield auth_service_1.AuthService.confirmCode(code);
-    console.log("registration-confirmation: ", result);
     if (!result) {
         res.status(400).send({
             "errorsMessages": [
@@ -72,7 +74,6 @@ exports.routerAuth.post('/registration-confirmation', (req, res) => __awaiter(vo
 }));
 exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email } = req.body;
-    console.log(email);
     let result = yield auth_service_1.AuthService.confirmResending(email);
     if (!result) {
         res.status(400).send({
@@ -85,5 +86,32 @@ exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter
         });
         return;
     }
+    res.sendStatus(204);
+}));
+exports.routerAuth.post('/refresh-token', verifyRefreshToken_1.verifyRefreshToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    const ipAddress = req.ip;
+    if (!user) {
+        return res.sendStatus(401);
+    }
+    let updatedTokens = yield jwt_service_1.ServiceJWT.updateRefreshToken(user.userId, ipAddress);
+    console.log("updatedTokens: ", updatedTokens);
+    if (!updatedTokens) {
+        return res.sendStatus(401);
+    }
+    res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MILLISECONDS_IN_HOUR * 3 });
+    res.send({ accessToken: updatedTokens.accessToken });
+}));
+exports.routerAuth.post('/logout', verifyRefreshToken_1.verifyRefreshToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    if (!user) {
+        return res.sendStatus(401);
+    }
+    let isLogout = yield jwt_service_1.ServiceJWT.removeRefreshToken(user.userId);
+    console.log("isLogout: ", isLogout);
+    if (!isLogout) {
+        return res.sendStatus(401);
+    }
+    delete req.cookies.refreshToken;
     res.sendStatus(204);
 }));

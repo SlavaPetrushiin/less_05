@@ -6,10 +6,14 @@ import { routerBlogs } from './routers/blogRouter';
 import { routerPosts } from './routers/postsRouter';
 import { routerTesting } from './routers/tetstingRouter';
 import { routerComments } from './routers/commentsRouter';
+import cookieParser from 'cookie-parser';
 import  cors from 'cors';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
 const port = process.env.PORT || 3000;  
 
