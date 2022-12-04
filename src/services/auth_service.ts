@@ -38,6 +38,7 @@ async function comparePassword(password: string, hash: string): Promise<boolean>
 	return false;
 }
 
+type RegistrationResponse = Omit<ApiTypes.IClientDB, 'hasPassword' | 'emailConfirmation'>  | null;
 export class AuthService {
 	static async login(loginOrEmail: string, password: string): Promise<ApiTypes.IClientDB | null> {
 		let user = await ClientsRepository.getClientByEmailOrLogin(loginOrEmail);
@@ -54,10 +55,10 @@ export class AuthService {
 		return user;
 	}
 
-	static async registration(login: string, email: string, password: string): Promise<ApiTypes.IClientDB | null> {
+	static async registration(login: string, email: string, password: string): Promise<RegistrationResponse> {
 		let isFoundedCandidate = await ClientsRepository.getClientByEmailOrLogin(login, email);
 
-		if(isFoundedCandidate){
+		if (isFoundedCandidate) {
 			return null;
 		}
 
@@ -68,7 +69,7 @@ export class AuthService {
 			return null;
 		}
 		const code = uuidv4()
-		logCollection.insertOne({code: code, url: 'registration', mail: email})
+		logCollection.insertOne({ code: code, url: 'registration', mail: email })
 		let client: ApiTypes.IClientDB = {
 			email,
 			login,
@@ -76,7 +77,7 @@ export class AuthService {
 			createdAt,
 			hasPassword: passwordHash,
 			emailConfirmation: {
-				code:  code,
+				code: code,
 				expirationData: add(new Date(), { hours: 1, minutes: 3 }),
 				isConfirmed: false
 			}
@@ -94,7 +95,12 @@ export class AuthService {
 		// 	return null;
 		// }
 
-		return client;
+		return {
+			id: client.id,
+			login: client.login,
+			email: client.email,
+			createdAt: client.createdAt
+		};
 	}
 
 	static async confirmCode(code: string): Promise<ModifyResult<ApiTypes.IClientDB> | null> {
@@ -119,10 +125,10 @@ export class AuthService {
 		if (client.emailConfirmation.isConfirmed) return null;
 
 		let newCode = uuidv4();
-		logCollection.insertOne({code: newCode, url: 'resend', mail: emailOrLogin})
+		logCollection.insertOne({ code: newCode, url: 'resend', mail: emailOrLogin })
 		let newExpirationData = add(new Date(), { hours: 1, minutes: 3 });
 		let isUpdatedClient = await ClientsRepository.updateClient(client.id, newCode, newExpirationData);
-		console.log("confirmResending: ", isUpdatedClient, );
+		console.log("confirmResending: ", isUpdatedClient,);
 		if (!isUpdatedClient) {
 			return null;
 		}

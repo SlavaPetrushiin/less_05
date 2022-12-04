@@ -96,7 +96,12 @@ class AuthService {
             // if (!isSentEmail) {
             // 	return null;
             // }
-            return client;
+            return {
+                id: client.id,
+                login: client.login,
+                email: client.email,
+                createdAt: client.createdAt
+            };
         });
     }
     static confirmCode(code) {
