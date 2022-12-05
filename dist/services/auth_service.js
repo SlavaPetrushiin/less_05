@@ -39,12 +39,12 @@ function hasPassword(password) {
 function comparePassword(password, hash) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            return yield bcrypt.compare(password, hash);
+            return bcrypt.compare(password, hash);
         }
         catch (error) {
             console.error(error);
+            return false;
         }
-        return false;
     });
 }
 class AuthService {

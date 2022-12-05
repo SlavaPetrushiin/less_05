@@ -56,8 +56,9 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		return;
 	}
 
-	res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
-	res.send({ accessToken });
+	return res.status(200)
+						.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+						.send({ accessToken });
 })
 
 routerAuth.post('/registration', userValidator, checkError, async (req: Request<{}, {}, IRegistration>, res: Response) => {
@@ -125,8 +126,10 @@ routerAuth.post('/refresh-token', verifyRefreshToken, async (req: Request<{}, {}
 		return res.sendStatus(401);
 	}
 
-	res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
-	res.send({ accessToken: updatedTokens.accessToken });
+
+	return  res.status(200)
+		.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+		.send({ accessToken: updatedTokens.accessToken });
 })
 
 routerAuth.post('/logout', verifyRefreshToken, async (req: Request, res: Response) => {

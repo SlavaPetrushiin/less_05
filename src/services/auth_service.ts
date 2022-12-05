@@ -30,12 +30,11 @@ async function hasPassword(password: string): Promise<string | null> {
 
 async function comparePassword(password: string, hash: string): Promise<boolean> {
 	try {
-		return await bcrypt.compare(password, hash);
+		return bcrypt.compare(password, hash);
 	} catch (error) {
 		console.error(error);
+		return false;
 	}
-
-	return false;
 }
 
 type RegistrationResponse = Omit<ApiTypes.IClientDB, 'hasPassword' | 'emailConfirmation'>  | null;

@@ -46,8 +46,9 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         res.sendStatus(401);
         return;
     }
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
-    res.send({ accessToken });
+    return res.status(200)
+        .cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+        .send({ accessToken });
 }));
 exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password, email } = req.body;
@@ -101,8 +102,9 @@ exports.routerAuth.post('/refresh-token', verifyRefreshToken_1.verifyRefreshToke
     if (!updatedTokens) {
         return res.sendStatus(401);
     }
-    res.cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS });
-    res.send({ accessToken: updatedTokens.accessToken });
+    return res.status(200)
+        .cookie('refreshToken', updatedTokens.refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+        .send({ accessToken: updatedTokens.accessToken });
 }));
 exports.routerAuth.post('/logout', verifyRefreshToken_1.verifyRefreshToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
