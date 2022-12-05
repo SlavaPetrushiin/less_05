@@ -18,11 +18,13 @@ const posts_service_1 = require("./../services/posts_service");
 const blogs_service_1 = require("./../services/blogs_service");
 const express_1 = __importDefault(require("express"));
 const clients_db_repository_1 = require("../repositories/clients-db-repository");
+const db_1 = require("../repositories/db");
 exports.routerTesting = express_1.default.Router();
 exports.routerTesting.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield blogs_service_1.BlogsService.deleteAllBlogs();
     yield posts_service_1.PostService.deleteAllBPosts();
     yield clients_db_repository_1.ClientsRepository.deleteUsers();
     yield comments_service_1.CommentsService.deleteAllComments();
+    yield db_1.refreshTokensCollection.deleteMany({});
     res.sendStatus(204);
 }));
