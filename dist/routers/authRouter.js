@@ -35,6 +35,7 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         res.sendStatus(401);
         return;
     }
+    console.log("USER LOGIN: ", user);
     // if (!user.emailConfirmation.isConfirmed) {
     // 	res.sendStatus(401);
     // 	return

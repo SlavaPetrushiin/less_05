@@ -40,7 +40,7 @@ exports.routerUsers.get("/", checkBasicAuth_1.checkBasicAuth, checkQueryUsers_1.
 }));
 exports.routerUsers.post("/", checkBasicAuth_1.checkBasicAuth, usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email, login, password } = req.body;
-    let newUser = yield auth_service_1.AuthService.registration(email, login, password);
+    let newUser = yield auth_service_1.AuthService.registration(login, email, password);
     if (!newUser) {
         return res.sendStatus(404);
     }

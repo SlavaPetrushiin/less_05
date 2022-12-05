@@ -37,7 +37,8 @@ routerUsers.get("/", checkBasicAuth, checkQueryUsers, async (req: Request<{}, {}
 
 routerUsers.post("/", checkBasicAuth, userValidator, checkError, async (req: Request<{}, {}, ICreateUserInput>, res: Response) => {
 	let { email, login, password } = req.body;
-	let newUser = await AuthService.registration(email, login, password);
+
+	let newUser = await AuthService.registration(login, email, password);
 	if (!newUser) {
 		return res.sendStatus(404);
 	}

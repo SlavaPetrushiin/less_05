@@ -5,8 +5,6 @@ dotenv.config();
 class EmailSend {
 	public async sendEmail(email: string, url: string) {
 
-
-
 		let pass = process.env.NODEMAILER_PASS;
 		let emailPas = process.env.NODEMAILER_EMAIL;
 

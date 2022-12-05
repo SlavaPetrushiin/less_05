@@ -90,7 +90,6 @@ export class AuthService {
 		}
 		let url = getUrlWithCode('confirm-email?code', code);
 		const isSentEmail = await Email.sendEmail(client.email, url);
-
 		// if (!isSentEmail) {
 		// 	return null;
 		// }
