@@ -13,12 +13,13 @@ export const verifyRefreshToken = async (req: Request<{}, {}, { accessToken: str
 	};
 
 	const isRefreshCodeExist = await RefreshTokensRepository.checkRefreshTokenInDB(refreshToken)
-
+	console.log(isRefreshCodeExist)
 	if (!isRefreshCodeExist) return res.sendStatus(401)
 
 	const userId = await ServiceJWT.getUserIdByToken(refreshToken, process.env.REFRESH_JWT_SECRET!);
 
 	if (!userId) {
+		console.log('token expired');
 		return res.sendStatus(401);
 	};
 

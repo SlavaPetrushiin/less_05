@@ -34,7 +34,7 @@ class RefreshTokenModel {
 		}
 	}
 
-	public async checkRefreshTokenInDB (token: string) {
+	public async checkRefreshTokenInDB (token: string): Promise<ApiTypes.IRefreshToken | null> {
 		try {
 			return refreshTokensCollection.findOne({token}, {projection: {_id: false}});
 		} catch (error) {

@@ -45,10 +45,12 @@ const verifyRefreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
     ;
     const isRefreshCodeExist = yield refreshToken_db_repository_1.RefreshTokensRepository.checkRefreshTokenInDB(refreshToken);
+    console.log(isRefreshCodeExist);
     if (!isRefreshCodeExist)
         return res.sendStatus(401);
     const userId = yield jwt_service_1.ServiceJWT.getUserIdByToken(refreshToken, process.env.REFRESH_JWT_SECRET);
     if (!userId) {
+        console.log('token expired');
         return res.sendStatus(401);
     }
     ;
