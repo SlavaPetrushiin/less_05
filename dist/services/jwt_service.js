@@ -58,7 +58,7 @@ class ServiceJWT {
     static addRefreshToken(userId, ipAddress) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const token = jsonwebtoken_1.default.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: '3h' });
+                const token = jsonwebtoken_1.default.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: EXPIRES_REFRESH_TIME });
                 const refreshToken = {
                     user: userId,
                     token: token,

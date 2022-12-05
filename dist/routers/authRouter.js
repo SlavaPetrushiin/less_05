@@ -94,9 +94,6 @@ exports.routerAuth.post('/registration-email-resending', (req, res) => __awaiter
 exports.routerAuth.post('/refresh-token', verifyRefreshToken_1.verifyRefreshToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     const ipAddress = req.ip;
-    if (!user) {
-        return res.sendStatus(401);
-    }
     let updatedTokens = yield jwt_service_1.ServiceJWT.updateRefreshToken(user.userId, ipAddress);
     console.log("updatedTokens: ", updatedTokens);
     if (!updatedTokens) {

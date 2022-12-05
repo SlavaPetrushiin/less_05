@@ -16,7 +16,7 @@ class RefreshTokenModel {
 		try {
 			let {user, token, createdByIp} = refreshToken;
 			let result = await refreshTokensCollection.updateOne({ user }, { $set: { token,  createdByIp}});
-			if (result.matchedCount == 0) {
+			if (result.matchedCount === 0) {
 				return false;
 			}
 			return true;

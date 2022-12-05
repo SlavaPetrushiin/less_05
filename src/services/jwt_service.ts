@@ -23,7 +23,7 @@ export class ServiceJWT {
 
 	static async addRefreshToken(userId: string, ipAddress: string) {
 		try {
-			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: '3h' })
+			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME})
 			const refreshToken = {
 				user: userId,
 				token: token,

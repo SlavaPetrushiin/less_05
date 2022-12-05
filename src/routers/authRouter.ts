@@ -114,11 +114,7 @@ routerAuth.post('/refresh-token', verifyRefreshToken, async (req: Request<{}, {}
 	let user = req.user;
 	const ipAddress = req.ip;
 
-	if (!user) {
-		return res.sendStatus(401);
-	}
-
-	let updatedTokens = await ServiceJWT.updateRefreshToken(user.userId, ipAddress);
+	let updatedTokens = await ServiceJWT.updateRefreshToken(user!.userId, ipAddress);
 
 	console.log("updatedTokens: ", updatedTokens);
 
