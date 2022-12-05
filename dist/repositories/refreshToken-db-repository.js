@@ -28,10 +28,7 @@ class RefreshTokenModel {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let { user, token, createdByIp } = refreshToken;
-                let result = yield db_1.refreshTokensCollection.updateOne({ user }, { $set: { token, createdByIp } });
-                if (result.matchedCount === 0) {
-                    return false;
-                }
+                yield db_1.refreshTokensCollection.updateOne({ user }, { $set: { token, createdByIp } }, { upsert: true });
                 return true;
             }
             catch (error) {

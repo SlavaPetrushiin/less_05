@@ -21,20 +21,20 @@ export class ServiceJWT {
 		}
 	}
 
-	static async addRefreshToken(userId: string, ipAddress: string) {
-		try {
-			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME})
-			const refreshToken = {
-				user: userId,
-				token: token,
-				createdByIp: ipAddress
-			}
-			await RefreshTokensRepository.addRefreshToken(refreshToken);
-			return refreshToken.token;
-		} catch (error) {
-			return null;
-		}
-	}
+	// static async addRefreshToken(userId: string, ipAddress: string) {
+	// 	try {
+	// 		const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME})
+	// 		const refreshToken = {
+	// 			user: userId,
+	// 			token: token,
+	// 			createdByIp: ipAddress
+	// 		}
+	// 		await RefreshTokensRepository.addRefreshToken(refreshToken);
+	// 		return refreshToken.token;
+	// 	} catch (error) {
+	// 		return null;
+	// 	}
+	// }
 
 	static async updateRefreshToken(userId: string, ipAddress: string): Promise<{accessToken: string, refreshToken: string} | null> {
 		try {
@@ -47,15 +47,14 @@ export class ServiceJWT {
 			}
 
 			let result = await RefreshTokensRepository.updateRefreshToken(refreshToken);
-			if (!result) {
-				return null;
-			}
 
 			return { accessToken, refreshToken: refreshToken.token };
 		} catch (error) {
 			return null;
 		}
 	}
+
+	// async testUpdate
 
 	static async getUserIdByToken(token: string, secretKey: string): Promise<string | null> {
 		try {

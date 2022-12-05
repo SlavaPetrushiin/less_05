@@ -40,15 +40,14 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
     // 	res.sendStatus(401);
     // 	return
     // }
-    const accessToken = yield jwt_service_1.ServiceJWT.addJWT(user.id);
-    const refreshToken = yield jwt_service_1.ServiceJWT.addRefreshToken(user.id, ipAddress);
-    if (!accessToken || !refreshToken) {
+    const tokens = yield jwt_service_1.ServiceJWT.updateRefreshToken(user.id, ipAddress);
+    if (!tokens) {
         res.sendStatus(401);
         return;
     }
     return res.status(200)
-        .cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
-        .send({ accessToken });
+        .cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+        .send({ accessToken: tokens.accessToken });
 }));
 exports.routerAuth.post('/registration', usersValidator_1.userValidator, checkError_1.checkError, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { login, password, email } = req.body;

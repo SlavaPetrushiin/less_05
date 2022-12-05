@@ -48,17 +48,16 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 	// 	return
 	// }
 
-	const accessToken = await ServiceJWT.addJWT(user.id);
-	const refreshToken = await ServiceJWT.addRefreshToken(user.id, ipAddress);
+	const tokens = await ServiceJWT.updateRefreshToken(user.id, ipAddress);
 
-	if (!accessToken || !refreshToken) {
+	if (!tokens) {
 		res.sendStatus(401);
 		return;
 	}
 
 	return res.status(200)
-						.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
-						.send({ accessToken });
+						.cookie('refreshToken', tokens.refreshToken, { httpOnly: true, secure: true, maxAge: MAX_AGE_COOKIE_MILLISECONDS })
+						.send({ accessToken: tokens.accessToken });
 })
 
 routerAuth.post('/registration', userValidator, checkError, async (req: Request<{}, {}, IRegistration>, res: Response) => {

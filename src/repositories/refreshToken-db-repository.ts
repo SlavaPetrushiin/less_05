@@ -15,10 +15,7 @@ class RefreshTokenModel {
 	public async updateRefreshToken(refreshToken: ApiTypes.IRefreshToken): Promise<boolean>{
 		try {
 			let {user, token, createdByIp} = refreshToken;
-			let result = await refreshTokensCollection.updateOne({ user }, { $set: { token,  createdByIp}});
-			if (result.matchedCount === 0) {
-				return false;
-			}
+			await refreshTokensCollection.updateOne({ user }, { $set: { token,  createdByIp}}, {upsert: true});
 			return true;
 		} catch (error) {
 			console.log('Not updated RefreshToken');

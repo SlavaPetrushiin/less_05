@@ -55,23 +55,20 @@ class ServiceJWT {
             }
         });
     }
-    static addRefreshToken(userId, ipAddress) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const token = jsonwebtoken_1.default.sign({ userId }, process.env.REFRESH_JWT_SECRET, { expiresIn: EXPIRES_REFRESH_TIME });
-                const refreshToken = {
-                    user: userId,
-                    token: token,
-                    createdByIp: ipAddress
-                };
-                yield refreshToken_db_repository_1.RefreshTokensRepository.addRefreshToken(refreshToken);
-                return refreshToken.token;
-            }
-            catch (error) {
-                return null;
-            }
-        });
-    }
+    // static async addRefreshToken(userId: string, ipAddress: string) {
+    // 	try {
+    // 		const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME})
+    // 		const refreshToken = {
+    // 			user: userId,
+    // 			token: token,
+    // 			createdByIp: ipAddress
+    // 		}
+    // 		await RefreshTokensRepository.addRefreshToken(refreshToken);
+    // 		return refreshToken.token;
+    // 	} catch (error) {
+    // 		return null;
+    // 	}
+    // }
     static updateRefreshToken(userId, ipAddress) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -83,9 +80,6 @@ class ServiceJWT {
                     createdByIp: ipAddress
                 };
                 let result = yield refreshToken_db_repository_1.RefreshTokensRepository.updateRefreshToken(refreshToken);
-                if (!result) {
-                    return null;
-                }
                 return { accessToken, refreshToken: refreshToken.token };
             }
             catch (error) {
@@ -93,6 +87,7 @@ class ServiceJWT {
             }
         });
     }
+    // async testUpdate
     static getUserIdByToken(token, secretKey) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
