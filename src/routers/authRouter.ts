@@ -41,6 +41,8 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		return
 	}
 
+	console.log("USER LOGIN: ", user)
+
 	// if (!user.emailConfirmation.isConfirmed) {
 	// 	res.sendStatus(401);
 	// 	return
