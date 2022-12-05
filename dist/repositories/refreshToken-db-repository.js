@@ -50,6 +50,16 @@ class RefreshTokenModel {
             }
         });
     }
+    checkRefreshTokenInDB(token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return db_1.refreshTokensCollection.findOne({ token }, { projection: { _id: false } });
+            }
+            catch (error) {
+                return null;
+            }
+        });
+    }
     removeRefreshTokenByUserID(userID) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

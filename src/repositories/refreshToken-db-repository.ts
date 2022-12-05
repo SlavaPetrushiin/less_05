@@ -34,6 +34,14 @@ class RefreshTokenModel {
 		}
 	}
 
+	public async checkRefreshTokenInDB (token: string) {
+		try {
+			return refreshTokensCollection.findOne({token}, {projection: {_id: false}});
+		} catch (error) {
+			return null;
+		}
+	}
+
 	public async removeRefreshTokenByUserID(userID: string): Promise<boolean>{
 		try {
 			let result = await refreshTokensCollection.deleteMany({user: userID});

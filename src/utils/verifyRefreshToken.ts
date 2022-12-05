@@ -1,3 +1,4 @@
+import { RefreshTokensRepository } from './../repositories/refreshToken-db-repository';
 import { ClientsRepository } from './../repositories/clients-db-repository';
 import { ServiceJWT } from './../services/jwt_service';
 import { Request, Response, NextFunction } from 'express';
@@ -11,12 +12,17 @@ export const verifyRefreshToken = async (req: Request<{}, {}, { accessToken: str
 		return res.sendStatus(401);
 	};
 
-	console.log("refreshToken: ", refreshToken);
+	const isRefreshCodeExist = await RefreshTokensRepository.checkRefreshTokenInDB(refreshToken)
+
+	if (!isRefreshCodeExist) return res.sendStatus(401)
+
 	const userId = await ServiceJWT.getUserIdByToken(refreshToken, process.env.REFRESH_JWT_SECRET!);
 
 	if (!userId) {
 		return res.sendStatus(401);
 	};
+
+	
 
 	let user = await ClientsRepository.getUSerByID(userId);
 

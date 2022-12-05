@@ -33,6 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyRefreshToken = void 0;
+const refreshToken_db_repository_1 = require("./../repositories/refreshToken-db-repository");
 const clients_db_repository_1 = require("./../repositories/clients-db-repository");
 const jwt_service_1 = require("./../services/jwt_service");
 const dotenv = __importStar(require("dotenv"));
@@ -43,7 +44,9 @@ const verifyRefreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0,
         return res.sendStatus(401);
     }
     ;
-    console.log("refreshToken: ", refreshToken);
+    const isRefreshCodeExist = yield refreshToken_db_repository_1.RefreshTokensRepository.checkRefreshTokenInDB(refreshToken);
+    if (!isRefreshCodeExist)
+        return res.sendStatus(401);
     const userId = yield jwt_service_1.ServiceJWT.getUserIdByToken(refreshToken, process.env.REFRESH_JWT_SECRET);
     if (!userId) {
         return res.sendStatus(401);
