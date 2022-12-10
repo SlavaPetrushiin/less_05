@@ -21,22 +21,8 @@ export class ServiceJWT {
 		}
 	}
 
-	// static async addRefreshToken(userId: string, ipAddress: string) {
-	// 	try {
-	// 		const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME})
-	// 		const refreshToken = {
-	// 			user: userId,
-	// 			token: token,
-	// 			createdByIp: ipAddress
-	// 		}
-	// 		await RefreshTokensRepository.addRefreshToken(refreshToken);
-	// 		return refreshToken.token;
-	// 	} catch (error) {
-	// 		return null;
-	// 	}
-	// }
 
-	static async updateRefreshToken(userId: string, ipAddress: string): Promise<{accessToken: string, refreshToken: string} | null> {
+	static async updateRefreshToken(userId: string, ipAddress: string): Promise<{ accessToken: string, refreshToken: string } | null> {
 		try {
 			const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: EXPIRES_ACCESS_TIME });
 			const token = jwt.sign({ userId }, process.env.REFRESH_JWT_SECRET!, { expiresIn: EXPIRES_REFRESH_TIME })
@@ -46,7 +32,7 @@ export class ServiceJWT {
 				createdByIp: ipAddress
 			}
 
-			let result = await RefreshTokensRepository.updateRefreshToken(refreshToken);
+			await RefreshTokensRepository.updateRefreshToken(refreshToken);
 
 			return { accessToken, refreshToken: refreshToken.token };
 		} catch (error) {
@@ -65,7 +51,7 @@ export class ServiceJWT {
 		}
 	}
 
-	static async removeRefreshToken(userId: string){
+	static async removeRefreshToken(userId: string) {
 		return RefreshTokensRepository.removeRefreshTokenByUserID(userId);
 	}
 

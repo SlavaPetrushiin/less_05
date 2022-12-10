@@ -20,7 +20,6 @@ interface IRegistration {
 	email: string;
 }
 
-
 const MILLISECONDS_IN_HOUR = 3600000;
 const MAX_AGE_COOKIE_MILLISECONDS = 20_000;
 
@@ -40,14 +39,6 @@ routerAuth.post('/login', loginValidator, checkErrorAuth, async (req: Request<{}
 		res.sendStatus(401);
 		return
 	}
-
-	console.log("USER LOGIN: ", user)
-
-	// if (!user.emailConfirmation.isConfirmed) {
-	// 	res.sendStatus(401);
-	// 	return
-	// }
-
 	const tokens = await ServiceJWT.updateRefreshToken(user.id, ipAddress);
 
 	if (!tokens) {
@@ -114,8 +105,6 @@ routerAuth.post('/refresh-token', verifyRefreshToken, async (req: Request<{}, {}
 	const ipAddress = req.ip;
 
 	let updatedTokens = await ServiceJWT.updateRefreshToken(user!.userId, ipAddress);
-
-	console.log("updatedTokens: ", updatedTokens);
 
 	if (!updatedTokens) {
 		return res.sendStatus(401);
