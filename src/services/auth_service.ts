@@ -13,7 +13,7 @@ function getUrlWithCode(url: string, code: string): string {
 	return `
 			<h1>Thank for your registration</h1>
 			<p>To finish registration please follow the link below:
-				<a href='https://somesite.com/${url}=${code}'>complete registration</a>
+				<a href='https://lithuwix.github.io/Blogger-Platform/#/registration-confirmation/${url}=${code}'>complete registration</a>
 		</p>
 	`
 }
