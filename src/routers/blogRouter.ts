@@ -11,8 +11,6 @@ import { checkQueryPostsAndBlogs, IQueryBlogsAndPosts } from '../utils/checkQuer
 export const routerBlogs = express.Router();
 
 routerBlogs.get('/', checkQueryPostsAndBlogs, async (req: Request<{}, {}, {}, IQueryBlogsAndPosts>, res: Response) => {
-	console.log(req.baseUrl);
-
 	let { searchNameTerm, pageNumber, pageSize, sortBy, sortDirection } = req.query;
 	let blogs = await QueryRepository.getAllBlogs({
 		searchNameTerm: searchNameTerm!,
@@ -26,6 +24,9 @@ routerBlogs.get('/', checkQueryPostsAndBlogs, async (req: Request<{}, {}, {}, IQ
 
 routerBlogs.post('/', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{}, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response<ApiTypes.IBlog | boolean>) => {
 	let { name, description, websiteUrl } = req.body;
+
+
+
 	let newBlog = await BlogsService.createBlog(name, description, websiteUrl);
 	if (!newBlog) return res.sendStatus(400);
 	return res.status(201).send(newBlog);

@@ -23,7 +23,6 @@ const blogs_service_1 = require("../services/blogs_service");
 const checkQueryPostsAndBlogs_1 = require("../utils/checkQueryPostsAndBlogs");
 exports.routerBlogs = express_1.default.Router();
 exports.routerBlogs.get('/', checkQueryPostsAndBlogs_1.checkQueryPostsAndBlogs, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.baseUrl);
     let { searchNameTerm, pageNumber, pageSize, sortBy, sortDirection } = req.query;
     let blogs = yield query_db_repository_1.QueryRepository.getAllBlogs({
         searchNameTerm: searchNameTerm,

@@ -41,7 +41,8 @@ if (!url) {
     throw new Error('Not connect DB');
 }
 const client = new mongodb_1.MongoClient(url);
-const dbName = "blogsAndPosts";
+const dbName = process.env.DB_NAME;
+console.log("process.env.DB_NAME: ", process.env.DB_NAME);
 exports.db = client.db(dbName);
 exports.blogsCollection = exports.db.collection("blogs");
 exports.postsCollection = exports.db.collection("posts");
