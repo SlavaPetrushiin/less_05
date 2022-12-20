@@ -4,8 +4,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const JWT_SECRET = process.env.ACCESS_JWT_SECRET || 'sdfwpsvd';
-const EXPIRES_ACCESS_TIME = '10s';
-const EXPIRES_REFRESH_TIME = '20s';
+const EXPIRES_ACCESS_TIME = '10h';
+const EXPIRES_REFRESH_TIME = '20h';
 
 export interface TokenInterface {
 	userId: string;

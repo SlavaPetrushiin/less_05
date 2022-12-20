@@ -21,7 +21,7 @@ interface IRegistration {
 }
 
 const MILLISECONDS_IN_HOUR = 3600000;
-const MAX_AGE_COOKIE_MILLISECONDS = 20_000;
+const MAX_AGE_COOKIE_MILLISECONDS = 20 * 3_600_000 ;
 
 routerAuth.get('/me', checkBearerAuth, async (req: Request<{}, {}, ILogin>, res: Response) => {
 	let user = req.user;

@@ -24,9 +24,6 @@ routerBlogs.get('/', checkQueryPostsAndBlogs, async (req: Request<{}, {}, {}, IQ
 
 routerBlogs.post('/', checkBasicAuth, createAndUpdateBlogValidator, checkError, async (req: Request<{}, {}, ApiTypes.ParamsCreateAndUpdateBlog>, res: Response<ApiTypes.IBlog | boolean>) => {
 	let { name, description, websiteUrl } = req.body;
-
-
-
 	let newBlog = await BlogsService.createBlog(name, description, websiteUrl);
 	if (!newBlog) return res.sendStatus(400);
 	return res.status(201).send(newBlog);
