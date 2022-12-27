@@ -12,7 +12,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({credentials: true}));
 app.set('trust proxy', true);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
