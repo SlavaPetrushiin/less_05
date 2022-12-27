@@ -1,22 +1,25 @@
 import { routerAuth } from './routers/authRouter';
 import { routerUsers } from './routers/usersRouter';
-import express, {Request, Response, NextFunction} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { runDB } from './repositories/db';
 import { routerBlogs } from './routers/blogRouter';
 import { routerPosts } from './routers/postsRouter';
 import { routerTesting } from './routers/tetstingRouter';
 import { routerComments } from './routers/commentsRouter';
 import cookieParser from 'cookie-parser';
-import  cors from 'cors';
+import cors from 'cors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-app.use(cors({credentials: true}));
+app.use(cors({
+  credentials: true,
+  origin: true,
+}));
 app.set('trust proxy', true);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.json());
-const port = process.env.PORT || 3000;  
+const port = process.env.PORT || 3000;
 
 app.use('/auth', routerAuth);
 app.use('/users', routerUsers);
@@ -38,7 +41,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.send('500 - Ошибка сервера');
 })
 
-const startApp =async () => {
+const startApp = async () => {
   await runDB();
 
   app.listen(port, async () => {
