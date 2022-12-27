@@ -24,13 +24,13 @@ const checkEmailOrLogin = (emailOrLogin) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.loginValidator = [
-    (0, express_validator_1.body)("loginOrEmail").isString().isLength({ min: 3, max: 10 }).withMessage("login должен быть от 3 до 10 символов"),
-    (0, express_validator_1.body)("password").isString().isLength({ min: 6, max: 20 }).withMessage("Пароль должен быть от 6 до 20 символов"),
+    (0, express_validator_1.body)("loginOrEmail").isString().isLength({ min: 3, max: 25 }).withMessage("Указан невалидный логин или пароль"),
+    (0, express_validator_1.body)("password").isString().isLength({ min: 6, max: 20 }).withMessage("Указан невалидный логин или пароль"),
 ];
 exports.userValidator = [
     (0, express_validator_1.body)("login")
         .isString()
-        .isLength({ min: 3, max: 10 })
+        .isLength({ min: 3, max: 25 })
         .withMessage("login должен быть от 3 до 10 символов")
         .custom(checkEmailOrLogin)
         .withMessage("Пользователь с таким логином существует"),

@@ -15,14 +15,14 @@ const checkEmailOrLogin = async (emailOrLogin: string) => {
 }
 
 export const loginValidator = [
-	body("loginOrEmail").isString().isLength({ min: 3, max: 10 }).withMessage("Указан невалидный логин или пароль"),
+	body("loginOrEmail").isString().isLength({ min: 3, max: 25 }).withMessage("Указан невалидный логин или пароль"),
 	body("password").isString().isLength({ min: 6, max: 20 }).withMessage("Указан невалидный логин или пароль"),
 ]
 
 export const userValidator = [
 	body("login")
 		.isString()
-		.isLength({ min: 3, max: 10 })
+		.isLength({ min: 3, max: 25 })
 		.withMessage("login должен быть от 3 до 10 символов")
 		.custom(checkEmailOrLogin)
 		.withMessage("Пользователь с таким логином существует"),

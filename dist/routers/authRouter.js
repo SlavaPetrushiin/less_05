@@ -22,7 +22,7 @@ const auth_service_1 = require("../services/auth_service");
 const verifyRefreshToken_1 = require("../utils/verifyRefreshToken");
 exports.routerAuth = express_1.default.Router();
 const MILLISECONDS_IN_HOUR = 3600000;
-const MAX_AGE_COOKIE_MILLISECONDS = 20000;
+const MAX_AGE_COOKIE_MILLISECONDS = 20 * 3600000;
 exports.routerAuth.get('/me', checkBearerAuth_1.checkBearerAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
     res.send(user);
@@ -35,11 +35,6 @@ exports.routerAuth.post('/login', usersValidator_1.loginValidator, checkError_1.
         res.sendStatus(401);
         return;
     }
-    console.log("USER LOGIN: ", user);
-    // if (!user.emailConfirmation.isConfirmed) {
-    // 	res.sendStatus(401);
-    // 	return
-    // }
     const tokens = yield jwt_service_1.ServiceJWT.updateRefreshToken(user.id, ipAddress);
     if (!tokens) {
         res.sendStatus(401);
@@ -94,7 +89,6 @@ exports.routerAuth.post('/refresh-token', verifyRefreshToken_1.verifyRefreshToke
     let user = req.user;
     const ipAddress = req.ip;
     let updatedTokens = yield jwt_service_1.ServiceJWT.updateRefreshToken(user.userId, ipAddress);
-    console.log("updatedTokens: ", updatedTokens);
     if (!updatedTokens) {
         return res.sendStatus(401);
     }
